@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Input &mdash; DalmatinerDB 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="DalmatinerDB 0.1.0 documentation" href="index.html"/>
+        <link rel="next" title="TCP Protocol" href="tcp_proto.html"/>
+        <link rel="prev" title="Configuration" href="configuration.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> DalmatinerDB</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Data Input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#metric-package">Metric Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-section">Data Section</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tcp_proto.html">TCP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language.html">Dalmatiner Query Language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#aggregation-functions">Aggregation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#manipulation-functions">Manipulation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">DalmatinerDB</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Data Input</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/ingres.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="data-input">
+<h1>Data Input<a class="headerlink" href="#data-input" title="Permalink to this headline">¶</a></h1>
+<p>DalmatinerDB uses UDP for data ingres, this is one of the tradeofs it does. UDP is a lot faster then TCP, it prevents providers blocking and the consumer from overloading by simply dropping packages it can not handle. It is possible to have multiple UDP ports to allow more effecient usage of concurrencly.</p>
+<div class="section" id="metric-package">
+<h2>Metric Package<a class="headerlink" href="#metric-package" title="Permalink to this headline">¶</a></h2>
+<p>Metrics are send as size prefixed data, the layout of a metric package looks like this:</p>
+<div class="highlight-erlang"><div class="highlight"><pre><span class="o">&lt;&lt;</span><span class="mi">0</span><span class="p">,</span>                                   <span class="c">%% Prefix to denote type of message</span>
+  <span class="nv">Time</span><span class="p">:</span><span class="mi">64</span><span class="o">/</span><span class="n">integer</span><span class="p">,</span>                     <span class="c">%% The time (or offset) of the package</span>
+  <span class="nv">BucketSize</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="n">integer</span><span class="p">,</span>               <span class="c">%% The size of the bucket name</span>
+  <span class="nv">Bucket</span><span class="p">:</span><span class="nv">BucketSize</span><span class="o">/</span><span class="n">binary</span>             <span class="c">%% The bucket to write the metric to</span>
+  <span class="nv">MetricSize</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="n">integer</span><span class="p">,</span>               <span class="c">%% The size of the metric name</span>
+  <span class="nv">Metric</span><span class="p">:</span><span class="nv">MetricSize</span><span class="o">/</span><span class="n">binary</span>             <span class="c">%% The metric name</span>
+  <span class="nv">DataSize</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="n">integer</span><span class="p">,</span>                 <span class="c">%% The size of the metric name</span>
+  <span class="nv">Data</span><span class="p">:</span><span class="nv">DataSize</span><span class="o">/</span><span class="n">binary</span>                 <span class="c">%% The metric name</span>
+  <span class="o">&gt;&gt;</span>
+</pre></div>
+</div>
+<p>All sizes are given in bytes. The values are unsigned integers in <strong>network byte order</strong>. Especially with <cite>DataSize</cite> this is to be noted since it does <strong>NOT</strong> reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of 9. In result a maximum of 7281 datapoitns can bs send per metric pacage not 65536.</p>
+<p>Not only can have a metric package have multiple consecutive datapoints, it is also possible to combine multiple metric packages into a single UDP datagram. This allows to set multiple different metrics at once. Combining metric packages allows for some optimisations and is recommanded as long as the liveliness of the data doesn&#8217;t prevent it.</p>
+</div>
+<div class="section" id="data-section">
+<h2>Data Section<a class="headerlink" href="#data-section" title="Permalink to this headline">¶</a></h2>
+<p>The data section contains raw data for the database, each datapoint consists out of 9 bytes. 1 byte for indicating written data and 8 byte for a 64bit signed integer in network byte order.</p>
+<div class="highlight-erlang"><div class="highlight"><pre><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="nv">Value</span><span class="p">:</span><span class="mi">64</span><span class="o">/</span><span class="n">signed</span><span class="o">-</span><span class="n">integer</span><span class="o">&gt;&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tcp_proto.html" class="btn btn-neutral float-right" title="TCP Protocol"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Configuration"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Heinz N. Gies.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
