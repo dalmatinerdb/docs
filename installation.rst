@@ -24,6 +24,7 @@ Dependencies:
 Installing the datastore
 ````````````````````````
 .. code-block:: bash
+
    git clone https://github.com/dalmatinerdb/dalmatinerdb.git
    cd dalmatinerdb
    make deps all rel
@@ -37,6 +38,7 @@ Installing the frontend
 ```````````````````````
 
 .. code-block:: bash
+
    git clone https://github.com/dalmatinerdb/dalmatiner-frontend.git
    cd dalmatiner-frontend
    make deps all rel

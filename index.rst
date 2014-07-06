@@ -5,7 +5,7 @@ Welcome to DalmatinerDB's documentation!
 ========================================
 
 .. warning::
-   This documentaiton and DalmatinerDB is still prety young, please do not use it in mission critical environments without a backup!
+   This documentaiton and DalmatinerDB are still quite young, please do not use it in mission critical environments without a backup!
 
 .. toctree::
    :hidden:
