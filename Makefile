@@ -23,6 +23,11 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 h: html
 
+init:
+	-rm -rf _build
+	mkdir -p _build/html
+	git clone git@github.com:dalmatinerdb/docs --branch gh-pages _build/html
+
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html       to make standalone HTML files"
