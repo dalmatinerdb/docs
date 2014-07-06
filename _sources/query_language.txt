@@ -107,7 +107,7 @@ derivate/1
 ``````````
 Calculates the derivate of a metric, meaing N'(X)=N(X) - N(X-1)
 
-.. note:
+.. note::
    Even so the resolution isn't changed this function removes exactly 1 element from the result
 
 multiply/2
