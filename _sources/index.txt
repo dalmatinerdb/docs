@@ -16,9 +16,3 @@ Welcome to DalmatinerDB's documentation!
    ingres
    tcp_proto
    query_language
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
