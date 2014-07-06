@@ -4,7 +4,8 @@
 Welcome to DalmatinerDB's documentation!
 ========================================
 
-Contents:
+.. warning::
+   This documentaiton and DalmatinerDB is still prety young, please do not use it in mission critical environments without a backup!
 
 .. toctree::
    :hidden:
@@ -15,8 +16,6 @@ Contents:
    ingres
    tcp_proto
    query_language
-
-
 
 Indices and tables
 ==================
