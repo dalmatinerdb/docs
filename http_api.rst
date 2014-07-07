@@ -1,5 +1,5 @@
-.. DalmatinerDB documentation master file, created by
-   Heinz N. Gies on Sat Jul  5 16:49:03 2014.
+.. DalmatinerDB HTTP API documentation, created by
+   Heinz N. Gies on Sat Jul  7 16:49:03 2014.
 
 HTTP API
 ========
