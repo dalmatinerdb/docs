@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Benchmarks &mdash; DalmatinerDB 0.1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="DalmatinerDB 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="HTTP API" href="http_api.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> DalmatinerDB</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#binaries">Binaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-sorce">From Sorce</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ingres.html">Data Input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ingres.html#metric-package">Metric Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ingres.html#data-section">Data Section</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tcp_proto.html">TCP Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language.html">Dalmatiner Query Language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#aggregation-functions">Aggregation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#manipulation-functions">Manipulation Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="http_api.html">HTTP API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#bucket-listing">Bucket Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#metric-listing">Metric Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#dql-query">DQL Query</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Benchmarks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workload">Workload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#runtime">Runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#addendum">Addendum</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">DalmatinerDB</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Benchmarks</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="benchmarks">
+<h1>Benchmarks<a class="headerlink" href="#benchmarks" title="Permalink to this headline">¶</a></h1>
+<p>Artifical benchmarks only show a portion of the reality so instead this page shows the result form real workloaded seen in production. The exact same workload is mirrored to different backedns on identical hardare and os configuration.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The benchmarks are first results and not perfected yet, it is by no means a comprehensive compairison but should give a general idea of the state of things.</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hardware-os">
+<h3>Hardware &amp; OS<a class="headerlink" href="#hardware-os" title="Permalink to this headline">¶</a></h3>
+<p>Tests run in Zones on SmartOS 20140124T065835Z, each zone has 16 GB of memory, 400% (non competeing) CPU CAP (and shares equivalent to 4 cores on a hyperthreaded dual <cite>E5-2687W v2 &#64; 3.40GHz</cite>).</p>
+<p>Each zone has 15TB of storage on spinning disks with L2ARC and ZIL on mirrord SSDs.</p>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlyer a detailed breakdown is given in the section for DalmatinerDB).</p>
+</div>
+<div class="section" id="datastores">
+<h3>Datastores<a class="headerlink" href="#datastores" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>DalmatinerDB - obviously</li>
+<li>Grafite - (based on the SmartOS dataset version)</li>
+<li>KairosDB - (on cassandra 2.0.5)</li>
+<li>InfluxDB - not included, doesn&#8217;t compile on SmartOS and running in a KVM gives a unfair disadvantage</li>
+</ul>
+</div>
+</div>
+<div class="section" id="workload">
+<h2>Workload<a class="headerlink" href="#workload" title="Permalink to this headline">¶</a></h2>
+<p>The workload the systems are subjected to are a stream of roughly 14000 metrics per seconds (that is one datapoint per metric per second). The only batching allowed is on the metric axis not the time axis, this cuts network overhead and does not reduce the liveliness of the databases data.</p>
+<p>Each metric consists of:</p>
+<ul class="simple">
+<li>A matric identifyer (name)</li>
+<li>A epoch timestamp</li>
+<li>A value forthat timestamp</li>
+</ul>
+</div>
+<div class="section" id="runtime">
+<h2>Runtime<a class="headerlink" href="#runtime" title="Permalink to this headline">¶</a></h2>
+<p>Since the metric flow is consistant the runtime is considerably long, the mesurements presented here are taken afte a week of continued load.</p>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>Results for Grafite are not listed since half way thorugh the test carbon-cache locked up with all memory in the zone consumed.</p>
+<div class="section" id="usage-during-opperations">
+<h3>Usage during opperations<a class="headerlink" href="#usage-during-opperations" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="30%" />
+<col width="19%" />
+<col width="23%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Measurement</td>
+<td>DalmatinerDB</td>
+<td colspan="2">KairosDB</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Kairos</td>
+<td>Cassandra</td>
+</tr>
+<tr class="row-odd"><td>CPU Usage %</td>
+<td>2.8%</td>
+<td>3.5%</td>
+<td>1.8%</td>
+</tr>
+<tr class="row-even"><td>CPU Cores</td>
+<td>0.9</td>
+<td>1.1%</td>
+<td>0.6</td>
+</tr>
+<tr class="row-odd"><td>Memory SIZE</td>
+<td>260MB</td>
+<td>1323MB</td>
+<td>7720MB</td>
+</tr>
+<tr class="row-even"><td>Memory RSS</td>
+<td>135MB</td>
+<td>1303MB</td>
+<td>5546MB</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-size">
+<h3>Data Size<a class="headerlink" href="#data-size" title="Permalink to this headline">¶</a></h3>
+<p>All systems use compression shown is the effective datasize on disk:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">KairosDB uses compression on Cassandra level and there is no option to disable it, this makes it hard to say waht exactly the compresison ratio is or the effective size per metric is.</p>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="35%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Measurement</td>
+<td>DalmatinerDB</td>
+<td>KairosDB</td>
+</tr>
+<tr class="row-even"><td>grows 10m</td>
+<td>9133B</td>
+<td>80514B</td>
+</tr>
+<tr class="row-odd"><td>compressratio</td>
+<td>8.32x</td>
+<td>1.02x *</td>
+</tr>
+<tr class="row-even"><td>size/point</td>
+<td>8.65 bit</td>
+<td>???</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="addendum">
+<h2>Addendum<a class="headerlink" href="#addendum" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dalmatierdb-write-sizes">
+<h3>DalmatierDB write sizes<a class="headerlink" href="#dalmatierdb-write-sizes" title="Permalink to this headline">¶</a></h3>
+<p>Actual distribution of write cache as affected by read and out of order flushs</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td># Metrics</td>
+<td># Writes</td>
+</tr>
+<tr class="row-even"><td>38</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>85</td>
+<td>10</td>
+</tr>
+<tr class="row-even"><td>49</td>
+<td>32</td>
+</tr>
+<tr class="row-odd"><td>16</td>
+<td>69</td>
+</tr>
+<tr class="row-even"><td>37</td>
+<td>132</td>
+</tr>
+<tr class="row-odd"><td>83</td>
+<td>149</td>
+</tr>
+<tr class="row-even"><td>84</td>
+<td>417</td>
+</tr>
+<tr class="row-odd"><td>15</td>
+<td>588</td>
+</tr>
+<tr class="row-even"><td>62</td>
+<td>672</td>
+</tr>
+<tr class="row-odd"><td>93</td>
+<td>672</td>
+</tr>
+<tr class="row-even"><td>35</td>
+<td>682</td>
+</tr>
+<tr class="row-odd"><td>63</td>
+<td>682</td>
+</tr>
+<tr class="row-even"><td>69</td>
+<td>682</td>
+</tr>
+<tr class="row-odd"><td>13</td>
+<td>806</td>
+</tr>
+<tr class="row-even"><td>14</td>
+<td>849</td>
+</tr>
+<tr class="row-odd"><td>36</td>
+<td>1030</td>
+</tr>
+<tr class="row-even"><td>12</td>
+<td>4030</td>
+</tr>
+<tr class="row-odd"><td>11</td>
+<td>4398</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>11694</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>11719</td>
+</tr>
+<tr class="row-even"><td>8</td>
+<td>12780</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>13124</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>15206</td>
+</tr>
+<tr class="row-odd"><td>7</td>
+<td>25545</td>
+</tr>
+<tr class="row-even"><td>6</td>
+<td>29203</td>
+</tr>
+<tr class="row-odd"><td>101</td>
+<td>37089</td>
+</tr>
+<tr class="row-even"><td>4</td>
+<td>52765</td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>85455</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>86841</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="http_api.html" class="btn btn-neutral" title="HTTP API"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Heinz N. Gies.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
