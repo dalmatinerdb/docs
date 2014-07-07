@@ -16,3 +16,4 @@ Welcome to DalmatinerDB's documentation!
    ingres
    tcp_proto
    query_language
+   http_api

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to DalmatinerDB’s documentation! &mdash; DalmatinerDB 0.1.0 documentation</title>
+  <title>HTTP API &mdash; DalmatinerDB 0.1.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   
 
   
-    <link rel="top" title="DalmatinerDB 0.1.0 documentation" href="#"/>
-        <link rel="next" title="Installation" href="installation.html"/> 
+    <link rel="top" title="DalmatinerDB 0.1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Dalmatiner Query Language" href="query_language.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -43,7 +43,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-nav-search">
-        <a href="#" class="fa fa-home"> DalmatinerDB</a>
+        <a href="index.html" class="fa fa-home"> DalmatinerDB</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -56,7 +56,7 @@
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
         
         
-            <ul>
+            <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#binaries">Binaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#from-sorce">From Sorce</a></li>
@@ -77,10 +77,10 @@
 <li class="toctree-l2"><a class="reference internal" href="query_language.html#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="http_api.html">HTTP API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="http_api.html#bucket-listing">Bucket Listing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="http_api.html#metric-listing">Metric Listing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="http_api.html#dql-query">DQL Query</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">HTTP API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bucket-listing">Bucket Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metric-listing">Metric Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dql-query">DQL Query</a></li>
 </ul>
 </li>
 </ul>
@@ -95,7 +95,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">DalmatinerDB</a>
+        <a href="index.html">DalmatinerDB</a>
       </nav>
 
 
@@ -104,9 +104,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
+    <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>Welcome to DalmatinerDB&#8217;s documentation!</li>
+    <li>HTTP API</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -115,13 +115,40 @@
 </div>
           <div role="main">
             
-  <div class="section" id="welcome-to-dalmatinerdb-s-documentation">
-<h1>Welcome to DalmatinerDB&#8217;s documentation!<a class="headerlink" href="#welcome-to-dalmatinerdb-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This documentaiton and DalmatinerDB are still quite young, please do not use it in mission critical environments without a backup!</p>
+  <div class="section" id="http-api">
+<h1>HTTP API<a class="headerlink" href="#http-api" title="Permalink to this headline">¶</a></h1>
+<p>The dalmatiner frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the <strong>Content-Type</strong> requested. Three types are currently valid:</p>
+<ul class="simple">
+<li>text/html - will return a human redable UI page.</li>
+<li>application/json - returns the result in json format.</li>
+<li>application/x-messagepack - returns the results messagepack encoded.</li>
+</ul>
+<p>Using msgpack is recommanded as it both conserves computation time and bandwith during en- and decoding.</p>
+<div class="section" id="bucket-listing">
+<h2>Bucket Listing<a class="headerlink" href="#bucket-listing" title="Permalink to this headline">¶</a></h2>
+<p>To list buckets the endpoint <cite>/buckets</cite> is querried with a <cite>GET</cite> request, it will return a list of all buckets known to DalmatinerDB.</p>
 </div>
-<div class="toctree-wrapper compound">
+<div class="section" id="metric-listing">
+<h2>Metric Listing<a class="headerlink" href="#metric-listing" title="Permalink to this headline">¶</a></h2>
+<p>Lists all the metrics in a bucket, the endpoint <cite>/buckets/&lt;bucket name&gt;</cite> is querried with a <cite>GET</cite> request, it will return a list of all metrics inside the requested bucket.</p>
+</div>
+<div class="section" id="dql-query">
+<h2>DQL Query<a class="headerlink" href="#dql-query" title="Permalink to this headline">¶</a></h2>
+<p>To execute a DQL query a <cite>GET</cite> request is performed on the endpint <cite>/</cite>, and the query passed with the parameter <cite>q</cite>. Returned is a object of the form:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+ <span class="s2">&quot;t&quot;</span><span class="o">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="c1">// Duration in miliseconds</span>
+ <span class="s2">&quot;d&quot;</span><span class="o">:</span> <span class="p">[{</span><span class="cm">/*...*/</span><span class="p">}]</span> <span class="c1">// Result objects</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The result object looks like this:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
+ <span class="s2">&quot;n&quot;</span><span class="o">:</span> <span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="c1">// name of the result</span>
+ <span class="s2">&quot;r&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// resolution of the result</span>
+ <span class="s2">&quot;v&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mi">42</span> <span class="cm">/*, ...*/</span><span class="p">]</span> <span class="c1">// The array of values</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -131,8 +158,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="query_language.html" class="btn btn-neutral" title="Dalmatiner Query Language"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

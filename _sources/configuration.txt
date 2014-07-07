@@ -6,4 +6,4 @@
 Configuration
 =============
 
-TODO
+The configuration files are located in the `etc` subdirectories of the different applications, please consult the inline documentation for details about configuration parameters.
