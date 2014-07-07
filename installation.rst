@@ -1,7 +1,5 @@
 .. DalmatinerDB installation manual
-   sphinx-quickstart on Sat Jul  5 16:49:03 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   Heinz N. Gies on Sat Jul  5 16:49:03 2014.
 
 Installation
 ============
@@ -10,7 +8,6 @@ Binaries
 --------
 
 Sorry at this point in time no bianries exist.
-
 
 From Sorce
 ----------
@@ -34,6 +31,9 @@ Installing the datastore
    vi etc/dalmatinerdb.conf # check the settings and adjust if needed
    ./bin/ddb start
 
+ .. note::
+    DalmatinerDB by default expects to run as the user `dalmatinerdb`, this can be changed or disabled by editing the `bin/ddb` file's entry `RUNNER_USER`
+
 Installing the frontend
 ```````````````````````
 
@@ -48,6 +48,8 @@ Installing the frontend
    vi etc/dalmatinerfe.conf # check the settings and adjust if needed
    ./bin/dalmatinerfe start
 
+ .. note::
+    DalmatinerFrontend by default expects to run as the user `dalmatinerfe`, this can be changed or disabled by editing the `bin/dalmatinerfe` file's entry `RUNNER_USER`
 
  .. warning::
     At the moment automatic handling of disconnected upstream servers isn't handled well and might require a restart of the frontend.
