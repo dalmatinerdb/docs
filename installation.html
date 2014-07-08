@@ -140,37 +140,40 @@
 </ul>
 <div class="section" id="installing-the-datastore">
 <h3>Installing the datastore<a class="headerlink" href="#installing-the-datastore" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre>  git clone https://github.com/dalmatinerdb/dalmatinerdb.git
-  cd dalmatinerdb
-  make deps all rel
-  cp rel/dalmatinerdb $TARGET_DIRECTORY
-  cd $TARGET_DIRECTORY
-  cp etc/dalmatinerdb.conf.example etc/dalmatinerdb.conf
-  vi etc/dalmatinerdb.conf # check the settings and adjust if needed
-  ./bin/ddb start
-
-.. note::
-   DalmatinerDB by default expects to run as the user `dalmatinerdb`, this can be changed or disabled by editing the `bin/ddb` file&#39;s entry `RUNNER_USER`
+<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/dalmatinerdb/dalmatinerdb.git
+<span class="nb">cd </span>dalmatinerdb
+make deps all rel
+cp rel/dalmatinerdb <span class="nv">$TARGET_DIRECTORY</span>
+<span class="nb">cd</span> <span class="nv">$TARGET_DIRECTORY</span>
+cp etc/dalmatinerdb.conf.example etc/dalmatinerdb.conf
+vi etc/dalmatinerdb.conf <span class="c"># check the settings and adjust if needed</span>
+./bin/ddb start
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">DalmatinerDB by default expects to run as the user <cite>dalmatinerdb</cite>, this can be changed or disabled by editing the <cite>bin/ddb</cite> file&#8217;s entry <cite>RUNNER_USER</cite></p>
 </div>
 </div>
 <div class="section" id="installing-the-frontend">
 <h3>Installing the frontend<a class="headerlink" href="#installing-the-frontend" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash"><div class="highlight"><pre>  git clone https://github.com/dalmatinerdb/dalmatiner-frontend.git
-  <span class="nb">cd </span>dalmatiner-frontend
-  make deps all rel
-  cp rel/dalmatinerfe <span class="nv">$TARGET_DIRECTORY</span>
-  <span class="nb">cd</span> <span class="nv">$TARGET_DIRECTORY</span>
-  cp etc/dalmatinerfe.conf.example etc/dalmatinerfe.conf
-  vi etc/dalmatinerfe.conf <span class="c"># check the settings and adjust if needed</span>
-  ./bin/dalmatinerfe start
-
-.. note::
-   DalmatinerFrontend by default expects to run as the user <span class="sb">`</span>dalmatinerfe<span class="sb">`</span>, this can be changed or disabled by editing the <span class="sb">`</span>bin/dalmatinerfe<span class="sb">`</span> file<span class="s1">&#39;s entry `RUNNER_USER`</span>
-
-<span class="s1">.. warning::</span>
-<span class="s1">   At the moment automatic handling of disconnected upstream servers isn&#39;</span>t handled well and might require a restart of the frontend.
+<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/dalmatinerdb/dalmatiner-frontend.git
+<span class="nb">cd </span>dalmatiner-frontend
+make deps all rel
+cp rel/dalmatinerfe <span class="nv">$TARGET_DIRECTORY</span>
+<span class="nb">cd</span> <span class="nv">$TARGET_DIRECTORY</span>
+cp etc/dalmatinerfe.conf.example etc/dalmatinerfe.conf
+vi etc/dalmatinerfe.conf <span class="c"># check the settings and adjust if needed</span>
+./bin/dalmatinerfe start
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">DalmatinerFrontend by default expects to run as the user <cite>dalmatinerfe</cite>, this can be changed or disabled by editing the <cite>bin/dalmatinerfe</cite> file&#8217;s entry <cite>RUNNER_USER</cite></p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">At the moment automatic handling of disconnected upstream servers isn&#8217;t handled well and might require a restart of the frontend.</p>
 </div>
 </div>
 </div>
