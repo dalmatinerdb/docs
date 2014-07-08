@@ -4,12 +4,12 @@
 Benchmarks
 ==========
 
-Artifical benchmarks only show a portion of the reality so instead this page shows the result form real workloaded seen in production. The exact same workload is mirrored to different backedns on identical hardare and os configuration.
+Artificial benchmarks only show a portion of the reality so instead this page shows results form real workloads seen in production. The exact same workload is mirrored to different backends on identical hardware and OS configuration.
 
 
 .. warning::
    
-   The benchmarks are first results and not perfected yet, it is by no means a comprehensive compairison but should give a general idea of the state of things.
+   The benchmarks are initial results and not yet perfected, and it is by no means a comprehensive comparison but should give a general idea of the state of things.
 
 Setup
 -----
@@ -17,46 +17,46 @@ Setup
 Hardware & OS
 `````````````
 
-Tests run in Zones on SmartOS 20140124T065835Z, each zone has 16 GB of memory, 400% (non competeing) CPU CAP (and shares equivalent to 4 cores on a hyperthreaded dual `E5-2687W v2 @ 3.40GHz`).
+Tests run in Zones on SmartOS 20140124T065835Z, each zone has 16 GB of memory, 400% (non-competing) CPU CAP (and shares equivalent to 4 cores on a hyperthreaded dual `E5-2687W v2 @ 3.40GHz`).
 
-Each zone has 15TB of storage on spinning disks with L2ARC and ZIL on mirrord SSDs.
+Each zone has 15TB of storage on spinning disks with L2ARC and ZIL on mirrored SSDs.
 
 Configuration
 `````````````
 
-DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlyer a detailed breakdown is given in the section for DalmatinerDB).
+DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier a detailed breakdown is given in the DalmatinerDB section).
 
 Datastores
 ``````````
 
 * DalmatinerDB - obviously
-* Grafite - (based on the SmartOS dataset version)
-* KairosDB - (on cassandra 2.0.5)
-* InfluxDB - not included, doesn't compile on SmartOS and running in a KVM gives a unfair disadvantage
+* Graphite - (based on the SmartOS dataset version)
+* KairosDB - (on Cassandra 2.0.5)
+* InfluxDB - not included, doesn't compile on SmartOS and running in a KVM would result in an unfair disadvantage
 
 Workload
 --------
 
-The workload the systems are subjected to are a stream of roughly 14000 metrics per seconds (that is one datapoint per metric per second). The only batching allowed is on the metric axis not the time axis, this cuts network overhead and does not reduce the liveliness of the databases data.
+The systems are subjected to a workload of a stream of roughly 14,000 metrics per seconds (that is one datapoint per metric per second). The only batching allowed is on the metric axis not the time axis, which cuts network overhead and does not reduce the liveliness of the database's data.
 
 Each metric consists of:
 
-* A matric identifyer (name)
-* A epoch timestamp
-* A value forthat timestamp
+* A metric identifier (name)
+* An epoch timestamp
+* A value for the timestamp
 
-Runtime
--------
+Duration
+--------
 
-Since the metric flow is consistant the runtime is considerably long, the mesurements presented here are taken afte a week of continued load.
+Measurements presented here are taken after a week of continuous load.
 
 Results
 -------
 
-Results for Grafite are not listed since half way thorugh the test carbon-cache locked up with all memory in the zone consumed.
+Results for Graphite are not listed since halfway through the test carbon-cache locked up with and consumed 100% memory in its zone.
 
-Usage during opperations
-`````````````````````````````
+Usage during operations
+```````````````````````
 
 
 +-------------+--------------+---------------------+
@@ -77,11 +77,11 @@ Usage during opperations
 Data Size
 `````````
 
-All systems use compression shown is the effective datasize on disk:
+All systems use compression shown is the effective data size on disk:
 
 .. note::
 
-  KairosDB uses compression on Cassandra level and there is no option to disable it, this makes it hard to say waht exactly the compresison ratio is or the effective size per metric is.
+  KairosDB uses compression in Cassandra and there is no option to disable it, which makes it hard to determine the compresison ratio and the effective size per metric.
 
 +---------------+--------------+-----------+
 | Measurement   | DalmatinerDB | KairosDB  |
@@ -140,7 +140,8 @@ Addendum
 
 DalmatierDB write sizes
 ```````````````````````
-Actual distribution of write cache as affected by read and out of order flushs
+
+Actual distribution of write cache as affected by read and out of order flushes:
 
 =========== ============
 # Metrics      # Writes
