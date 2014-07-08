@@ -93,6 +93,47 @@ All systems use compression shown is the effective datasize on disk:
 | size/point    | 8.65 bit     | ???       |
 +---------------+--------------+-----------+
 
+Query Times
+```````````
+
+Query performed: The maximum nwait per second over the last hour for a given VM.
+
+.. code-block::
+   sql
+
+   SELECT max(cloud.zones.cpu.nwait.e2be6f6c-2005-4f2d-aff9-f427b9 BUCKET tachyon, 1m) LAST 1h
+
++---------------+--------------+-----------+
+|               | DalmatinerDB | KairosDB  |
++---------------+--------------+-----------+
+| First         | ~2ms         | ~300ms    |
++---------------+--------------+-----------+
+| consecutive   | ~1.3ms       | ~135ms    |
++---------------+--------------+-----------+
+
+
+Query performed: The maximum nwait per hour over the last day for 7 VMs.
+
+.. code-block::
+   sql
+
+   select
+     max(cloud.zones.cpu.usage.f242021c-c5eb-4c53-a609-64bee4 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.b02df988-2abf-4364-8f55-c39eb3 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.7d1a1a3b-f3e9-4388-a938-c3a866 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.986ea915-f274-41c4-9ac5-b3dbd1 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.1333cf62-b8f1-496a-b2e1-5ec9d4 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.c6a34e43-a242-46e5-89af-b25431 BUCKET tachyon, 1h),
+     max(cloud.zones.cpu.usage.e86f77ef-27a3-44c2-9348-f2319b BUCKET tachyon, 1h) LAST 1d
+
++---------------+--------------+-----------+
+|               | DalmatinerDB | KairosDB  |
++---------------+--------------+-----------+
+| First         | ~120ms       | ~1600ms   |
++---------------+--------------+-----------+
+| consecutive   | ~85ms        | ~1450ms   |
++---------------+--------------+-----------+
+
 
 Addendum
 --------

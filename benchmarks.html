@@ -243,6 +243,66 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="query-times">
+<h3>Query Times<a class="headerlink" href="#query-times" title="Permalink to this headline">¶</a></h3>
+<p>Query performed: The maximum nwait per second over the last hour for a given VM.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">SELECT</span> <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="n">nwait</span><span class="p">.</span><span class="n">e2be6f6c</span><span class="o">-</span><span class="mi">2005</span><span class="o">-</span><span class="mi">4</span><span class="n">f2d</span><span class="o">-</span><span class="n">aff9</span><span class="o">-</span><span class="n">f427b9</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">m</span><span class="p">)</span> <span class="k">LAST</span> <span class="mi">1</span><span class="n">h</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="35%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&nbsp;</td>
+<td>DalmatinerDB</td>
+<td>KairosDB</td>
+</tr>
+<tr class="row-even"><td>First</td>
+<td>~2ms</td>
+<td>~300ms</td>
+</tr>
+<tr class="row-odd"><td>consecutive</td>
+<td>~1.3ms</td>
+<td>~135ms</td>
+</tr>
+</tbody>
+</table>
+<p>Query performed: The maximum nwait per hour over the last day for 7 VMs.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">select</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="n">f242021c</span><span class="o">-</span><span class="n">c5eb</span><span class="o">-</span><span class="mi">4</span><span class="n">c53</span><span class="o">-</span><span class="n">a609</span><span class="o">-</span><span class="mi">64</span><span class="n">bee4</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="n">b02df988</span><span class="o">-</span><span class="mi">2</span><span class="n">abf</span><span class="o">-</span><span class="mi">4364</span><span class="o">-</span><span class="mi">8</span><span class="n">f55</span><span class="o">-</span><span class="n">c39eb3</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="mi">7</span><span class="n">d1a1a3b</span><span class="o">-</span><span class="n">f3e9</span><span class="o">-</span><span class="mi">4388</span><span class="o">-</span><span class="n">a938</span><span class="o">-</span><span class="n">c3a866</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="mi">986</span><span class="n">ea915</span><span class="o">-</span><span class="n">f274</span><span class="o">-</span><span class="mi">41</span><span class="n">c4</span><span class="o">-</span><span class="mi">9</span><span class="n">ac5</span><span class="o">-</span><span class="n">b3dbd1</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="mi">1333</span><span class="n">cf62</span><span class="o">-</span><span class="n">b8f1</span><span class="o">-</span><span class="mi">496</span><span class="n">a</span><span class="o">-</span><span class="n">b2e1</span><span class="o">-</span><span class="mi">5</span><span class="n">ec9d4</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="n">c6a34e43</span><span class="o">-</span><span class="n">a242</span><span class="o">-</span><span class="mi">46</span><span class="n">e5</span><span class="o">-</span><span class="mi">89</span><span class="n">af</span><span class="o">-</span><span class="n">b25431</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">),</span>
+  <span class="k">max</span><span class="p">(</span><span class="n">cloud</span><span class="p">.</span><span class="n">zones</span><span class="p">.</span><span class="n">cpu</span><span class="p">.</span><span class="k">usage</span><span class="p">.</span><span class="n">e86f77ef</span><span class="o">-</span><span class="mi">27</span><span class="n">a3</span><span class="o">-</span><span class="mi">44</span><span class="n">c2</span><span class="o">-</span><span class="mi">9348</span><span class="o">-</span><span class="n">f2319b</span> <span class="n">BUCKET</span> <span class="n">tachyon</span><span class="p">,</span> <span class="mi">1</span><span class="n">h</span><span class="p">)</span> <span class="k">LAST</span> <span class="mi">1</span><span class="n">d</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="35%" />
+<col width="28%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>&nbsp;</td>
+<td>DalmatinerDB</td>
+<td>KairosDB</td>
+</tr>
+<tr class="row-even"><td>First</td>
+<td>~120ms</td>
+<td>~1600ms</td>
+</tr>
+<tr class="row-odd"><td>consecutive</td>
+<td>~85ms</td>
+<td>~1450ms</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section" id="addendum">
 <h2>Addendum<a class="headerlink" href="#addendum" title="Permalink to this headline">¶</a></h2>
