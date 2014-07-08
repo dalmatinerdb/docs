@@ -55,7 +55,7 @@ help:
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
-push: html
+push: h
 	(cd _build/html && git add .)
 	(cd _build/html && git commit -m "html build")
 	(cd _build/html && git push)
