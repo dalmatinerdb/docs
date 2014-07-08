@@ -87,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="benchmarks.html">Benchmarks</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#setup">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#workload">Workload</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#runtime">Runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#duration">Duration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#results">Results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#addendum">Addendum</a></li>
 </ul>
@@ -126,10 +126,10 @@
             
   <div class="section" id="data-input">
 <h1>Data Input<a class="headerlink" href="#data-input" title="Permalink to this headline">¶</a></h1>
-<p>DalmatinerDB uses UDP for data ingres, this is one of the tradeofs it does. UDP is a lot faster then TCP, it prevents providers blocking and the consumer from overloading by simply dropping packages it can not handle. It is possible to have multiple UDP ports to allow more effecient usage of concurrencly.</p>
+<p>DalmatinerDB uses UDP for data ingres, which is one of its trade-offs. UDP is a lot faster than TCP. It prevents the providers from blocking and the consumer from overloading by dropping packages it can not handle. It is possible to have multiple UDP ports for increased concurrency.</p>
 <div class="section" id="metric-package">
 <h2>Metric Package<a class="headerlink" href="#metric-package" title="Permalink to this headline">¶</a></h2>
-<p>Metrics are send as size prefixed data, the layout of a metric package looks like this:</p>
+<p>Metrics are sent as size prefixed data. The layout of a metric package looks like this:</p>
 <div class="highlight-erlang"><div class="highlight"><pre><span class="o">&lt;&lt;</span><span class="mi">0</span><span class="p">,</span>                                   <span class="c">%% Prefix to denote type of message</span>
   <span class="nv">Time</span><span class="p">:</span><span class="mi">64</span><span class="o">/</span><span class="n">integer</span><span class="p">,</span>                     <span class="c">%% The time (or offset) of the package</span>
   <span class="nv">BucketSize</span><span class="p">:</span><span class="mi">16</span><span class="p">:</span><span class="n">integer</span><span class="p">,</span>               <span class="c">%% The size of the bucket name</span>
@@ -141,12 +141,12 @@
   <span class="o">&gt;&gt;</span>
 </pre></div>
 </div>
-<p>All sizes are given in bytes. The values are unsigned integers in <strong>network byte order</strong>. Especially with <cite>DataSize</cite> this is to be noted since it does <strong>NOT</strong> reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of 9. In result a maximum of 7281 datapoitns can bs send per metric pacage not 65536.</p>
-<p>Not only can have a metric package have multiple consecutive datapoints, it is also possible to combine multiple metric packages into a single UDP datagram. This allows to set multiple different metrics at once. Combining metric packages allows for some optimisations and is recommanded as long as the liveliness of the data doesn&#8217;t prevent it.</p>
+<p>All sizes are given in bytes. The values are unsigned integers in <strong>network byte order</strong>. Especially with <cite>DataSize</cite> this is to be noted since it does <strong>NOT</strong> reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of 9. As a result, a maximum of 7281 datapoints can be sent per metric package, not 65536.</p>
+<p>Not only can a metric package have multiple consecutive datapoints, it is also possible to combine multiple metric packages into a single UDP datagram. This allows to set multiple different metrics at once. Combining metric packages allows for some optimizations and is recommended as long as the liveliness of the data doesn&#8217;t prevent it.</p>
 </div>
 <div class="section" id="data-section">
 <h2>Data Section<a class="headerlink" href="#data-section" title="Permalink to this headline">¶</a></h2>
-<p>The data section contains raw data for the database, each datapoint consists out of 9 bytes. 1 byte for indicating written data and 8 byte for a 64bit signed integer in network byte order.</p>
+<p>The data section contains raw data for the database, each datapoint consists out of 9 bytes. 1 byte for indicating written data and 8 byte for a 64 bit signed integer in network byte order.</p>
 <div class="highlight-erlang"><div class="highlight"><pre><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="nv">Value</span><span class="p">:</span><span class="mi">64</span><span class="o">/</span><span class="n">signed</span><span class="o">-</span><span class="n">integer</span><span class="o">&gt;&gt;</span>
 </pre></div>
 </div>

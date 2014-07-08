@@ -4,33 +4,33 @@
 HTTP API
 ========
 
-The dalmatiner frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the **Content-Type** requested. Three types are currently valid:
+The DalmatinerDB frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the **Content-Type** requested. Three types are currently valid:
 
-* text/html - will return a human redable UI page.
+* text/html - will return a human readable UI page.
 * application/json - returns the result in json format.
-* application/x-messagepack - returns the results messagepack encoded.
+* application/x-messagepack - returns the result's MessagePack encoded.
 
-Using msgpack is recommanded as it both conserves computation time and bandwith during en- and decoding.
+Using MessagePack is recommended as it both conserves computation time and bandwidth during encoding and decoding.
 
 Bucket Listing
 --------------
 
-To list buckets the endpoint `/buckets` is querried with a `GET` request, it will return a list of all buckets known to DalmatinerDB.
+To list all buckets, submit a `GET` request to the endpoint `/buckets`. The reponse will return a list of all buckets known to DalmatinerDB.
 
 Metric Listing
 --------------
 
-Lists all the metrics in a bucket, the endpoint `/buckets/<bucket name>` is querried with a `GET` request, it will return a list of all metrics inside the requested bucket.
+To list all the metrics in a bucket, submit a `GET` request to the endpoint `/buckets/<bucket name>`. The response will return a list of all metrics inside the requested bucket.
 
 DQL Query
 ---------
 
-To execute a DQL query a `GET` request is performed on the endpint `/`, and the query passed with the parameter `q`. Returned is a object of the form:
+To execute a DQL query a `GET` request is performed on the endpint `/`, and the query passed with the parameter `q`. The response will return an object of the form:
 
 .. code-block:: javascript
 
    {
-    "t": 1.2, // Duration in miliseconds
+    "t": 1.2, // Duration in milliseconds
     "d": [{/*...*/}] // Result objects
    }
 

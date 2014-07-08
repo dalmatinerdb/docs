@@ -87,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="benchmarks.html">Benchmarks</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#setup">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#workload">Workload</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#runtime">Runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#duration">Duration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#results">Results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#addendum">Addendum</a></li>
 </ul>
@@ -126,26 +126,26 @@
             
   <div class="section" id="http-api">
 <h1>HTTP API<a class="headerlink" href="#http-api" title="Permalink to this headline">¶</a></h1>
-<p>The dalmatiner frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the <strong>Content-Type</strong> requested. Three types are currently valid:</p>
+<p>The DalmatinerDB frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the <strong>Content-Type</strong> requested. Three types are currently valid:</p>
 <ul class="simple">
-<li>text/html - will return a human redable UI page.</li>
+<li>text/html - will return a human readable UI page.</li>
 <li>application/json - returns the result in json format.</li>
-<li>application/x-messagepack - returns the results messagepack encoded.</li>
+<li>application/x-messagepack - returns the result&#8217;s MessagePack encoded.</li>
 </ul>
-<p>Using msgpack is recommanded as it both conserves computation time and bandwith during en- and decoding.</p>
+<p>Using MessagePack is recommended as it both conserves computation time and bandwidth during encoding and decoding.</p>
 <div class="section" id="bucket-listing">
 <h2>Bucket Listing<a class="headerlink" href="#bucket-listing" title="Permalink to this headline">¶</a></h2>
-<p>To list buckets the endpoint <cite>/buckets</cite> is querried with a <cite>GET</cite> request, it will return a list of all buckets known to DalmatinerDB.</p>
+<p>To list all buckets, submit a <cite>GET</cite> request to the endpoint <cite>/buckets</cite>. The reponse will return a list of all buckets known to DalmatinerDB.</p>
 </div>
 <div class="section" id="metric-listing">
 <h2>Metric Listing<a class="headerlink" href="#metric-listing" title="Permalink to this headline">¶</a></h2>
-<p>Lists all the metrics in a bucket, the endpoint <cite>/buckets/&lt;bucket name&gt;</cite> is querried with a <cite>GET</cite> request, it will return a list of all metrics inside the requested bucket.</p>
+<p>To list all the metrics in a bucket, submit a <cite>GET</cite> request to the endpoint <cite>/buckets/&lt;bucket name&gt;</cite>. The response will return a list of all metrics inside the requested bucket.</p>
 </div>
 <div class="section" id="dql-query">
 <h2>DQL Query<a class="headerlink" href="#dql-query" title="Permalink to this headline">¶</a></h2>
-<p>To execute a DQL query a <cite>GET</cite> request is performed on the endpint <cite>/</cite>, and the query passed with the parameter <cite>q</cite>. Returned is a object of the form:</p>
+<p>To execute a DQL query a <cite>GET</cite> request is performed on the endpint <cite>/</cite>, and the query passed with the parameter <cite>q</cite>. The response will return an object of the form:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
- <span class="s2">&quot;t&quot;</span><span class="o">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="c1">// Duration in miliseconds</span>
+ <span class="s2">&quot;t&quot;</span><span class="o">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="c1">// Duration in milliseconds</span>
  <span class="s2">&quot;d&quot;</span><span class="o">:</span> <span class="p">[{</span><span class="cm">/*...*/</span><span class="p">}]</span> <span class="c1">// Result objects</span>
 <span class="p">}</span>
 </pre></div>

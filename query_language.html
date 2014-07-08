@@ -87,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="benchmarks.html">Benchmarks</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#setup">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#workload">Workload</a></li>
-<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#runtime">Runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="benchmarks.html#duration">Duration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#results">Results</a></li>
 <li class="toctree-l2"><a class="reference internal" href="benchmarks.html#addendum">Addendum</a></li>
 </ul>
@@ -128,7 +128,7 @@
 <h1>Dalmatiner Query Language<a class="headerlink" href="#dalmatiner-query-language" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="general">
 <h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
-<p>The frontend query language is rather remotely related to SQL, this should make it simple to pick up. The focus is on querying a metric at a time given those queries are incredible fast, however globs can be used to query multiple metrics at a time.</p>
+<p>The frontend query language is rather remotely related to SQL, which should make it simple to pick up. The focus is on querying one metric at a time, given that those queries are incredible fast. Globs can also be used to query multiple metrics at a time.</p>
 <p>The basic syntax looks like this:</p>
 <div class="highlight-python"><div class="highlight"><pre>SELECT &lt;FIELDS&gt; [ FROM &lt;ALIASES&gt;] &lt;TIME RANGE&gt; [IN &lt;RESOLUTION&gt;]
 </pre></div>
@@ -136,57 +136,58 @@
 <p>Please keep in mind that each query can only return a single row of data at the moment.</p>
 <div class="section" id="fields-select-section">
 <h3>Fields (<cite>SELECT</cite> section)<a class="headerlink" href="#fields-select-section" title="Permalink to this headline">¶</a></h3>
-<p>A field can either be a metric, a alias to a metric or a function:</p>
+<p>A field can either be a metric, an alias for a metric or a function:</p>
 <ul class="simple">
-<li><cite>cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon</cite> - a fully qualifeid metric.</li>
-<li><cite>vm</cite> - an alias that is defined in the <cite>FROM</cite> section of the queryt.</li>
+<li><cite>cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon</cite> - a fully qualified metric.</li>
+<li><cite>vm</cite> - an alias that is defined in the <cite>FROM</cite> section of the query.</li>
 <li><cite>avg(vm, 1m)</cite> - a aggregation function.</li>
 </ul>
 <p>Fields can be aliased for output adding a <cite>AS &lt;alias&gt;</cite> directive after the field.</p>
-<p>Multiple fields can be given seperating two fields with a <cite>,</cite>. The resolution of fields do not have to be the same, there is no check enforcing this!</p>
+<p>Multiple fields can be given separating two fields with a <cite>,</cite>. The resolution of fields does not have to be the same, and there is no validation to enforce this!</p>
 </div>
 <div class="section" id="aliases-from-section">
 <h3>Aliases (<cite>FROM</cite> section)<a class="headerlink" href="#aliases-from-section" title="Permalink to this headline">¶</a></h3>
-<p>When a metric is used multime times it often gets more readable to alias this metric, this is done in the <cite>FROM</cite> section. Multiple elements can be given seperated with a <cite>,</cite>. Each element takes the form: <cite>&lt;metric&gt; BUCKET &lt;bucket&gt; AS &lt;alias&gt;</cite>.</p>
+<p>When a metric is used multiple times it is more readable to alias this metric in the <cite>FROM</cite> section. Multiple elements can be given separated with a <cite>,</cite>. Each element takes the form: <cite>&lt;metric&gt; BUCKET &lt;bucket&gt; AS &lt;alias&gt;</cite>.</p>
 <p>It is possible to match multiple metrics by using a mulitget aggregator and a glob to match a metric. Valid multiget aggregators are <cite>sum</cite> and <cite>avg</cite>. For example: <cite>sum(some.metric.* BUCKET b)</cite>.</p>
 </div>
 <div class="section" id="time-range">
-<h3>TIME RANGE<a class="headerlink" href="#time-range" title="Permalink to this headline">¶</a></h3>
-<p>There are two ways to declare ranges, while nubers here represent seconds DalmatinerDB does not care about the time unit at all:</p>
+<h3>Time Range<a class="headerlink" href="#time-range" title="Permalink to this headline">¶</a></h3>
+<p>There are two ways to declare ranges. Although numbers here represent seconds, DalmatinerDB does not care about the time unit at all:</p>
 <div class="highlight-python"><div class="highlight"><pre>BETWEEN &lt;start:reltime&gt; AND &lt;end:reltime&gt;
 </pre></div>
 </div>
-<p>Will select all pints between the <cite>start</cite> and the <cite>end</cite>. However often the most used query is &#8216;what happned in the past X seconds&#8217; so there is a simplified form for this:</p>
+<p>The above statement selects all points between the <cite>start</cite> and the <cite>end</cite>.</p>
+<p>The most used query is &#8216;what happened in the past X seconds?&#8217;, so there is a simplified form for this:</p>
 <div class="highlight-python"><div class="highlight"><pre>LAST &lt;amount:int&gt;|[time:time&gt;]
 </pre></div>
 </div>
 </div>
 <div class="section" id="resolution-in-section">
 <h3>Resolution (<cite>IN</cite> section)<a class="headerlink" href="#resolution-in-section" title="Permalink to this headline">¶</a></h3>
-<p>By default queries treat incoming data as a one second resolution, however this can be adjusted by passing a resolution section to the query, the syntax is: <cite>IN &lt;resolution:time&gt;</cite>.</p>
+<p>By default queries treat incoming data as a one second resolution, however this can be adjusted by passing a resolution section to the query. The syntax is: <cite>IN &lt;resolution:time&gt;</cite>.</p>
 </div>
 </div>
 <div class="section" id="data-types">
 <h2>Data Types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="integer-int">
 <h3>Integer (int)<a class="headerlink" href="#integer-int" title="Permalink to this headline">¶</a></h3>
-<p>A simple numern literal i.e. <cite>42</cite>.</p>
+<p>A simple number literal i.e. <cite>42</cite>.</p>
 </div>
 <div class="section" id="time-time">
 <h3>Time (time)<a class="headerlink" href="#time-time" title="Permalink to this headline">¶</a></h3>
 <p>There are two ways to declare times:</p>
 <ul class="simple">
-<li>relatively, in which case the time is a simple integer and corresponds to a number of metric points used. (i.e. <cite>60</cite>)</li>
-<li>absolute, in which case the time is a integer followed by a time unit such as <cite>ms</cite>, <cite>s</cite>, <cite>m</cite>, <cite>h</cite>, <cite>d</cite> and <cite>w</cite>, in this case the resolution of the metric is taken into acount.</li>
+<li>Relatively, in which case the time is a simple integer and corresponds to a number of metric points used. (i.e. <cite>60</cite>)</li>
+<li>Absolute, in which case the time is an integer followed by a time unit such as <cite>ms</cite>, <cite>s</cite>, <cite>m</cite>, <cite>h</cite>, <cite>d</cite> and <cite>w</cite>. In this case the resolution of the metric is taken into account.</li>
 </ul>
 </div>
 <div class="section" id="relative-time-reltime">
 <h3>Relative Time (reltime)<a class="headerlink" href="#relative-time-reltime" title="Permalink to this headline">¶</a></h3>
-<p>Relative times can either be the keyword <cite>NOW</cite>, a absolute timestamp (a simple integer) or a relative time in the past such as <cite>&lt;time&gt; AGO</cite>.</p>
+<p>Relative times can either be the keyword <cite>NOW</cite>, an absolute timestamp (a simple integer) or a relative time in the past such as <cite>&lt;time&gt; AGO</cite>.</p>
 </div>
 <div class="section" id="metric">
 <h3>Metric<a class="headerlink" href="#metric" title="Permalink to this headline">¶</a></h3>
-<p>Metrics are simple strings that are optionally seperated by dots and a second strring for the bucket. The two strings are seperated by the keyword <cite>BUCKET</cite>.</p>
+<p>Metrics are simple strings that are optionally separated by dots and a second string for the bucket. The two strings are separated by the keyword <cite>BUCKET</cite>.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre>cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon
 </pre></div>
@@ -195,7 +196,7 @@
 </div>
 <div class="section" id="aggregation-functions">
 <h2>Aggregation Functions<a class="headerlink" href="#aggregation-functions" title="Permalink to this headline">¶</a></h2>
-<p>Aggregation functions aggregate a metric over a given range of time and decrease the resolution by doing so. Aggregation functions can be nested in which case the &#8216;higher&#8217; functiosn work with the decreased resolution of lower functions and not the raw resolution. This means the correct code to get the 1m average over 10s sums from a 1s resolution metric would be  <cite>avg(sum(m, 10s), 1m)</cite> not <cite>avg(sum(m, 10s), 6s)</cite> - however this does not apply when using the point and not the time declaration, so it would be: <cite>avg(sum(m, 10s), 6)</cite> not <cite>avg(sum(m, 10s), 60)</cite> (please note the missing <cite>s</cite>).</p>
+<p>Aggregation functions aggregate a metric over a given range of time and decrease the resolution by doing so. Aggregation functions can be nested, in which case the &#8216;higher&#8217; functions work with the decreased resolution of lower functions and not the raw resolution. This means the correct code to get the 1m average over 10s sums from a 1s resolution metric would be  <cite>avg(sum(m, 10s), 1m)</cite> not <cite>avg(sum(m, 10s), 6s)</cite> - however this does not apply when using the point and not the time declaration, so it would be: <cite>avg(sum(m, 10s), 6)</cite> not <cite>avg(sum(m, 10s), 60)</cite> (please note the missing <cite>s</cite>).</p>
 <div class="section" id="min-2">
 <h3>min/2<a class="headerlink" href="#min-2" title="Permalink to this headline">¶</a></h3>
 <p>The minimal value over a given range of time.</p>
@@ -215,13 +216,13 @@
 </div>
 <div class="section" id="manipulation-functions">
 <h2>Manipulation Functions<a class="headerlink" href="#manipulation-functions" title="Permalink to this headline">¶</a></h2>
-<p>Manipulation functiosn help to change the values of a value list they do not change the resolution or aggregate multiple values into one.</p>
+<p>Manipulation functions help to change the values of a value list they do not change the resolution or aggregate multiple values into one.</p>
 <div class="section" id="derivate-1">
 <h3>derivate/1<a class="headerlink" href="#derivate-1" title="Permalink to this headline">¶</a></h3>
-<p>Calculates the derivate of a metric, meaing N&#8217;(X)=N(X) - N(X-1)</p>
+<p>Calculates the derivate of a metric, meaning N&#8217;(X)=N(X) - N(X-1)</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Even so the resolution isn&#8217;t changed this function removes exactly 1 element from the result</p>
+<p class="last">Even if the resolution isn&#8217;t changed this function removes exactly 1 element from the result</p>
 </div>
 </div>
 <div class="section" id="multiply-2">
