@@ -4,7 +4,7 @@
 Benchmarks
 ==========
 
-Artificial benchmarks only show a portion of reality so all benchmarks were made in a real environment and results shown are based on workloads seen in production. To ensure comparability of the results for each database the exact same workload was mirrored to different backends on identical hardware and OS configuration. 
+Artificial benchmarks only show a portion of reality so all benchmarks were made in a real environment and results shown are based on workloads seen in production. To ensure comparability of results the exact same workload was mirrored to different backends on identical hardware and OS configuration. 
 
 
 .. warning::
