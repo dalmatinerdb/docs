@@ -4,11 +4,11 @@
 Benchmarks
 ==========
 
-Artificial benchmarks only show a portion of reality so all benchmarks were made in a real environment and results shown are based on workloads seen in production. To ensure comparability of results the exact same workload was mirrored to different backends on identical hardware and OS configuration. 
+Artificial benchmarks only show a portion of reality so all benchmarks were made in a real environment and results shown are based on workloads seen in production. To ensure comparability of results the exact same workload was mirrored to different backends on identical hardware and OS configuration.
 
 
 .. warning::
-   
+
    The benchmarks show initial results. The results are by no means a comprehensive comparison but should give a general idea of the state of things.
 
 Setup
@@ -71,7 +71,7 @@ The first graph shows CPU cores used. In it a cpu usage of 3.125 corresponds to 
 +-------------+--------------+---------+-----------+
 | CPU Usage % | 2.8%         | 3.5%    | 1.8%      |
 +-------------+--------------+---------+-----------+
-| CPU Cores   | 0.9          | 1.1%    | 0.6       |
+| CPU Cores   | 0.9          | 1.1     | 0.6       |
 +-------------+--------------+---------+-----------+
 
 .. image:: _static/img/bench_cpu.png
