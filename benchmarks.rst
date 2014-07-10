@@ -8,7 +8,7 @@ Artificial benchmarks only show a portion of the reality so instead this page sh
 
 
 .. warning::
-   
+
    The benchmarks are initial results and not yet perfected, and it is by no means a comprehensive comparison but should give a general idea of the state of things.
 
 Setup
