@@ -144,7 +144,8 @@
 </div>
 <div class="section" id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
-<p>DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier a detailed breakdown is given in the DalmatinerDB section).</p>
+<p>DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier a detailed breakdown is given in the DalmatinerDB section) and a R/N/W value of 1.</p>
+<p>KairosDB 0.9.3 and Cassandra version 2.0.5 are used with the default configuration (Keyspace configuration based on the KairosDB defaults) with a N value of 1, since it is not possible to disable compression lz4 is automatically used.</p>
 </div>
 <div class="section" id="datastores">
 <h3>Datastores<a class="headerlink" href="#datastores" title="Permalink to this headline">¶</a></h3>

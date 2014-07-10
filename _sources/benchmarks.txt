@@ -24,7 +24,9 @@ Each zone has 15TB of storage on spinning disks with L2ARC and ZIL on mirrored S
 Configuration
 `````````````
 
-DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier a detailed breakdown is given in the DalmatinerDB section).
+DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier a detailed breakdown is given in the DalmatinerDB section) and a R/N/W value of 1.
+
+KairosDB 0.9.3 and Cassandra version 2.0.5 are used with the default configuration (Keyspace configuration based on the KairosDB defaults) with a N value of 1, since it is not possible to disable compression lz4 is automatically used.
 
 Datastores
 ``````````
