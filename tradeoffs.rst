@@ -27,10 +27,19 @@ Everything is a integer
 ```````````````````````
 Every metric is either a integer value or can be represented as one (or mutliple). Allowing to scale metrics helps here. As an example ``1.5s`` can be represented as ``1500ms``, a set of percentiles can be represented as multiple metrics (``metric.99``, ``metric.95`` ...)
 
+
 Design
 ------
 
 CAP
 ```
-The perhaps first decision to make is either to pick Consistency or Availability. Metrics make 
+The perhaps first decision to make is either to pick Consistency or Availability. With metrics and the notion of immutabilit ythere is little harm in picking Availability here, so DalmatinerDB will stay available for read and write options even in the event of a network partition at the cost of giving stall reads on both sides of the pertition until it is healed (given side A can't knoow what was written at side B).
+
+Given the immutability of metrics it can be argued that it is impossible to generate conflicting values on both sides of a split, thus merging is simple and lossless.
+
+Filesystem
+``````````
+DalmatinerDB is designed to run on ZFS and other filesystems are strongly discuraged. While DalmatinerDB will start on any filesystem the experience will be greatly degraded without ZFS or a equally capable filesystem as a base.
+
+DalmatinerDB's performance relies heaviley on taking advantage of facilities like ARC, ZIL, checksums and volume compression. Expecting those things to be handled on a filesystem level makes it possible to remove most of the code for caching, compression, validation from the application improving code simplicity, stability and performance significantly.
 
