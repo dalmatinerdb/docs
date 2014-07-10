@@ -13,6 +13,7 @@ Welcome to DalmatinerDB's documentation!
 
    installation
    configuration
+   tradeoffs
    ingres
    tcp_proto
    query_language

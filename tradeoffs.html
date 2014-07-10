@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HTTP API &mdash; DalmatinerDB 0.1.0 documentation</title>
+  <title>Tradeoffs &amp; Design &mdash; DalmatinerDB 0.1.0 documentation</title>
   
 
   
@@ -29,8 +29,8 @@
 
   
     <link rel="top" title="DalmatinerDB 0.1.0 documentation" href="index.html"/>
-        <link rel="next" title="Benchmarks" href="benchmarks.html"/>
-        <link rel="prev" title="Dalmatiner Query Language" href="query_language.html"/> 
+        <link rel="next" title="Data Input" href="ingres.html"/>
+        <link rel="prev" title="Configuration" href="configuration.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -64,9 +64,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tradeoffs.html">Tradeoffs &amp; Design</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tradeoffs.html#foundation">Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tradeoffs.html#design">Design</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Tradeoffs &amp; Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#foundation">Foundation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#design">Design</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ingres.html">Data Input</a><ul>
@@ -83,10 +83,10 @@
 <li class="toctree-l2"><a class="reference internal" href="query_language.html#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">HTTP API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#bucket-listing">Bucket Listing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metric-listing">Metric Listing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dql-query">DQL Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="http_api.html">HTTP API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#bucket-listing">Bucket Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#metric-listing">Metric Listing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_api.html#dql-query">DQL Query</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="benchmarks.html">Benchmarks</a><ul>
@@ -120,7 +120,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>HTTP API</li>
+    <li>Tradeoffs &amp; Design</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -129,39 +129,40 @@
 </div>
           <div role="main">
             
-  <div class="section" id="http-api">
-<h1>HTTP API<a class="headerlink" href="#http-api" title="Permalink to this headline">¶</a></h1>
-<p>The DalmatinerDB frontend offers a simplistic HTTP API for running queries along with a basic UI. All endpoints respond in regards of the <strong>Content-Type</strong> requested. Three types are currently valid:</p>
-<ul class="simple">
-<li>text/html - will return a human readable UI page.</li>
-<li>application/json - returns the result in json format.</li>
-<li>application/x-messagepack - returns the result&#8217;s MessagePack encoded.</li>
-</ul>
-<p>Using MessagePack is recommended as it both conserves computation time and bandwidth during encoding and decoding.</p>
-<div class="section" id="bucket-listing">
-<h2>Bucket Listing<a class="headerlink" href="#bucket-listing" title="Permalink to this headline">¶</a></h2>
-<p>To list all buckets, submit a <cite>GET</cite> request to the endpoint <cite>/buckets</cite>. The reponse will return a list of all buckets known to DalmatinerDB.</p>
+  <div class="section" id="tradeoffs-design">
+<h1>Tradeoffs &amp; Design<a class="headerlink" href="#tradeoffs-design" title="Permalink to this headline">¶</a></h1>
+<p>An essential part of every database is to make a decision aobut which tradeoff to make, every database makes them in one way or another and I feel it important to be upfront about them. Being open about what is won and what is lost makes it not only honesty but makes it easyer for users to make a informed decision when picking a database for their usecase.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please keep in mind that all systems have tradeoffs and that just because some are not open about them does not mean they do not make them.</p>
 </div>
-<div class="section" id="metric-listing">
-<h2>Metric Listing<a class="headerlink" href="#metric-listing" title="Permalink to this headline">¶</a></h2>
-<p>To list all the metrics in a bucket, submit a <cite>GET</cite> request to the endpoint <cite>/buckets/&lt;bucket name&gt;</cite>. The response will return a list of all metrics inside the requested bucket.</p>
+<div class="section" id="foundation">
+<h2>Foundation<a class="headerlink" href="#foundation" title="Permalink to this headline">¶</a></h2>
+<p>The design decisions for DalmatinerDB are based on a number of observation about metrics. If those observations hold true for you then chances are good that DalmatinerDB is a good fit. If they don&#8217;t another system with different tradeoffs might be a better choice.</p>
+<div class="section" id="metrics-are-imutable">
+<h3>Metrics are imutable<a class="headerlink" href="#metrics-are-imutable" title="Permalink to this headline">¶</a></h3>
+<p>Once a metric is submitted it isn&#8217;t going to change any more, the CPU usage last mondah at 5:31 will not suddenly spike today. It might however happen that writing the metric is delayed, so writing in the &#8216;past&#8217; can happen.</p>
 </div>
-<div class="section" id="dql-query">
-<h2>DQL Query<a class="headerlink" href="#dql-query" title="Permalink to this headline">¶</a></h2>
-<p>To execute a DQL query a <cite>GET</cite> request is performed on the endpint <cite>/</cite>, and the query passed with the parameter <cite>q</cite>. The response will return an object of the form:</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
- <span class="s2">&quot;t&quot;</span><span class="o">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="c1">// Duration in milliseconds</span>
- <span class="s2">&quot;d&quot;</span><span class="o">:</span> <span class="p">[{</span><span class="cm">/*...*/</span><span class="p">}]</span> <span class="c1">// Result objects</span>
-<span class="p">}</span>
-</pre></div>
+<div class="section" id="a-single-value-doens-t-matter">
+<h3>A single value doens&#8217;t matter<a class="headerlink" href="#a-single-value-doens-t-matter" title="Permalink to this headline">¶</a></h3>
+<p>It is more important to have the bulk of data then have a single value. Usually all views are aggregated and missing values can be interpolated.</p>
 </div>
-<p>The result object looks like this:</p>
-<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
- <span class="s2">&quot;n&quot;</span><span class="o">:</span> <span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="c1">// name of the result</span>
- <span class="s2">&quot;r&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">// resolution of the result</span>
- <span class="s2">&quot;v&quot;</span><span class="o">:</span> <span class="p">[</span><span class="mi">42</span> <span class="cm">/*, ...*/</span><span class="p">]</span> <span class="c1">// The array of values</span>
-<span class="p">}</span>
-</pre></div>
+<div class="section" id="everything-is-a-integer">
+<h3>Everything is a integer<a class="headerlink" href="#everything-is-a-integer" title="Permalink to this headline">¶</a></h3>
+<p>Every metric is either a integer value or can be represented as one (or mutliple). Allowing to scale metrics helps here. As an example <tt class="docutils literal"><span class="pre">1.5s</span></tt> can be represented as <tt class="docutils literal"><span class="pre">1500ms</span></tt>, a set of percentiles can be represented as multiple metrics (<tt class="docutils literal"><span class="pre">metric.99</span></tt>, <tt class="docutils literal"><span class="pre">metric.95</span></tt> ...)</p>
+</div>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cap">
+<h3>CAP<a class="headerlink" href="#cap" title="Permalink to this headline">¶</a></h3>
+<p>The perhaps first decision to make is either to pick Consistency or Availability. With metrics and the notion of immutabilit ythere is little harm in picking Availability here, so DalmatinerDB will stay available for read and write options even in the event of a network partition at the cost of giving stall reads on both sides of the pertition until it is healed (given side A can&#8217;t knoow what was written at side B).</p>
+<p>Given the immutability of metrics it can be argued that it is impossible to generate conflicting values on both sides of a split, thus merging is simple and lossless.</p>
+</div>
+<div class="section" id="filesystem">
+<h3>Filesystem<a class="headerlink" href="#filesystem" title="Permalink to this headline">¶</a></h3>
+<p>DalmatinerDB is designed to run on ZFS and other filesystems are strongly discuraged. While DalmatinerDB will start on any filesystem the experience will be greatly degraded without ZFS or a equally capable filesystem as a base.</p>
+<p>DalmatinerDB&#8217;s performance relies heaviley on taking advantage of facilities like ARC, ZIL, checksums and volume compression. Expecting those things to be handled on a filesystem level makes it possible to remove most of the code for caching, compression, validation from the application improving code simplicity, stability and performance significantly.</p>
 </div>
 </div>
 </div>
@@ -172,10 +173,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="benchmarks.html" class="btn btn-neutral float-right" title="Benchmarks"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ingres.html" class="btn btn-neutral float-right" title="Data Input"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="query_language.html" class="btn btn-neutral" title="Dalmatiner Query Language"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral" title="Configuration"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
