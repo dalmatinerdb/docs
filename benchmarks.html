@@ -175,6 +175,8 @@
 <p>Results for Graphite are not listed since halfway through the test carbon-cache locked up with and consumed 100% memory in its zone.</p>
 <div class="section" id="usage-during-operations">
 <h3>Usage during operations<a class="headerlink" href="#usage-during-operations" title="Permalink to this headline">¶</a></h3>
+<p>The graphs shouw measurements over 1 hour, with the average over a minute taken of a from the described system w/o significant read quaries happening during that timeframe on DalmatinerDB and without any read quaries on KairosDB.</p>
+<p>The first graph shows CPU cores used, where a cpu usage of 3.125 corresponds to 100% of a core used.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="28%" />
@@ -202,6 +204,27 @@
 <td>1.1%</td>
 <td>0.6</td>
 </tr>
+</tbody>
+</table>
+<img alt="_images/bench_cpu.png" src="_images/bench_cpu.png" />
+<p>The second graph shows MB of used memory.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="30%" />
+<col width="19%" />
+<col width="23%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Measurement</td>
+<td>DalmatinerDB</td>
+<td colspan="2">KairosDB</td>
+</tr>
+<tr class="row-even"><td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Kairos</td>
+<td>Cassandra</td>
+</tr>
 <tr class="row-odd"><td>Memory SIZE</td>
 <td>260MB</td>
 <td>1323MB</td>
@@ -214,6 +237,7 @@
 </tr>
 </tbody>
 </table>
+<img alt="_images/bench_mem.png" src="_images/bench_mem.png" />
 </div>
 <div class="section" id="data-size">
 <h3>Data Size<a class="headerlink" href="#data-size" title="Permalink to this headline">¶</a></h3>

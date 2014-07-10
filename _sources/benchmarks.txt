@@ -58,6 +58,9 @@ Results for Graphite are not listed since halfway through the test carbon-cache 
 Usage during operations
 ```````````````````````
 
+The graphs shouw measurements over 1 hour, with the average over a minute taken of a from the described system w/o significant read quaries happening during that timeframe on DalmatinerDB and without any read quaries on KairosDB.
+
+The first graph shows CPU cores used, where a cpu usage of 3.125 corresponds to 100% of a core used.
 
 +-------------+--------------+---------------------+
 | Measurement | DalmatinerDB | KairosDB            |
@@ -68,11 +71,22 @@ Usage during operations
 +-------------+--------------+---------+-----------+
 | CPU Cores   | 0.9          | 1.1%    | 0.6       |
 +-------------+--------------+---------+-----------+
+
+.. image:: _static/img/bench_cpu.png
+
+The second graph shows MB of used memory.
+
++-------------+--------------+---------------------+
+| Measurement | DalmatinerDB | KairosDB            |
++-------------+--------------+---------+-----------+
+|             |              |  Kairos | Cassandra |
++-------------+--------------+---------+-----------+
 | Memory SIZE | 260MB        | 1323MB  | 7720MB    |
 +-------------+--------------+---------+-----------+
 | Memory RSS  | 135MB        | 1303MB  | 5546MB    |
 +-------------+--------------+---------+-----------+
 
+.. image:: _static/img/bench_mem.png
 
 Data Size
 `````````
