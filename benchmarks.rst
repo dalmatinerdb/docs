@@ -6,7 +6,6 @@ Benchmarks
 
 Artificial benchmarks only show a portion of reality so all benchmarks were made in a real environment and results shown are based on workloads seen in production. To ensure comparability of results the exact same workload was mirrored to different backends on identical hardware and OS configuration.
 
-
 .. warning::
 
    The benchmarks show initial results. The results are by no means a comprehensive comparison but should give a general idea of the state of things.
@@ -99,15 +98,15 @@ All systems use compression. Shown is the effective data size on disk:
 
   KairosDB uses compression in Cassandra and there is no option to disable it. This makes it hard to determine the compresison ratio and the effective size per metric.
 
-+---------------+--------------+-----------+
-| Measurement   | DalmatinerDB | KairosDB  |
-+---------------+--------------+-----------+
-| grows 10m     | 9133B        | 80514B    |
-+---------------+--------------+-----------+
-| compressratio | 8.32x        | 1.02x *   |
-+---------------+--------------+-----------+
-| size/point    | 8.65 bit     | ???       |
-+---------------+--------------+-----------+
++---------------+--------------+----------+
+| Measurement   | DalmatinerDB | KairosDB |
++---------------+--------------+----------+
+| grows 10m     | 9133B        | 80514B   |
++---------------+--------------+----------+
+| compressratio | 8.32x        | 1.02x *  |
++---------------+--------------+----------+
+| size/point    | 8.65 bit     | ???      |
++---------------+--------------+----------+
 
 Query Times
 ```````````
@@ -119,13 +118,13 @@ Query performed: The maximum nwait per second over the last hour for a given VM.
 
    SELECT max(cloud.zones.cpu.nwait.e2be6f6c-2005-4f2d-aff9-f427b9 BUCKET tachyon, 1m) LAST 1h
 
-+---------------+--------------+-----------+
-|               | DalmatinerDB | KairosDB  |
-+---------------+--------------+-----------+
-| First         | ~2ms         | ~300ms    |
-+---------------+--------------+-----------+
-| consecutive   | ~1.3ms       | ~135ms    |
-+---------------+--------------+-----------+
++-------------+--------------+----------+
+|             | DalmatinerDB | KairosDB |
++-------------+--------------+----------+
+| First       | ~2ms         | ~300ms   |
++-------------+--------------+----------+
+| consecutive | ~1.3ms       | ~135ms   |
++-------------+--------------+----------+
 
 
 Query performed: The maximum nwait per hour over the last day for 7 VMs.
@@ -142,13 +141,13 @@ Query performed: The maximum nwait per hour over the last day for 7 VMs.
      max(cloud.zones.cpu.usage.c6a34e43-a242-46e5-89af-b25431 BUCKET tachyon, 1h),
      max(cloud.zones.cpu.usage.e86f77ef-27a3-44c2-9348-f2319b BUCKET tachyon, 1h) LAST 1d
 
-+---------------+--------------+-----------+
-|               | DalmatinerDB | KairosDB  |
-+---------------+--------------+-----------+
-| First         | ~120ms       | ~1600ms   |
-+---------------+--------------+-----------+
-| consecutive   | ~85ms        | ~1450ms   |
-+---------------+--------------+-----------+
++-------------+--------------+----------+
+|             | DalmatinerDB | KairosDB |
++-------------+--------------+----------+
+| First       | ~120ms       | ~1600ms  |
++-------------+--------------+----------+
+| consecutive | ~85ms        | ~1450ms  |
++-------------+--------------+----------+
 
 
 Addendum
@@ -159,31 +158,31 @@ DalmatierDB write sizes
 
 Actual distribution of write cache as affected by read and out of order flushes:
 
-=========== ============
-# Metrics      # Writes
------------ ------------
-38                3
-85               10
-49               32
-16               69
-37              132
-83              149
-84              417
-15              588
-62              672
-93              672
-35              682
-63              682
-69              682
-13              806
-14              849
-36             1030
-12             4030
-11             4398
+========= ========
+# Metrics # Writes
+--------- --------
+38               3
+85              10
+49              32
+16              69
+37             132
+83             149
+84             417
+15             588
+62             672
+93             672
+35             682
+63             682
+69             682
+13             806
+14             849
+36            1030
+12            4030
+11            4398
 9            11694
 1            11719
 8            12780
-10            13124
+10           13124
 3            15206
 7            25545
 6            29203
@@ -191,4 +190,4 @@ Actual distribution of write cache as affected by read and out of order flushes:
 4            52765
 5            85455
 2            86841
-=========== ============
+========= ========
