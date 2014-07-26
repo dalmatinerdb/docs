@@ -7,7 +7,7 @@ Dalmatiner Query Language
 General
 -------
 
-The frontend query language is rather remotely related to SQL, which should make it simple to pick up. The focus is on querying one metric at a time, given that those queries are incredible fast. Globs can also be used to query multiple metrics at a time.
+The front end query language is rather remotely related to SQL, which should make it simple to pick up. The focus is on querying one metric at a time, given that those queries are incredible fast. Globs can also be used to query multiple metrics at a time.
 
 The basic syntax looks like this::
 
@@ -98,11 +98,19 @@ The maximal value over a given range of time.
 
 sum/2
 `````
-The sum of all values of a timerange.
+The sum of all values of a time-range.
 
 avg/2
 `````
-The average of a timerange (this is the mean not the median).
+The average of a time-range (this is the mean not the median).
+
+empty/2
+```````
+Returns the total of empty data-points in a time-range. This can be used to indicate the precision of the data and the loss occurring before they get stored.
+
+percentile/3
+```````
+Returns the value of the ``n`` th percentile, where 0 < ``n`` < 1. The percentile is given as the second value of the function, the time-range to aggregate over as the third.
 
 Manipulation Functions
 ----------------------
@@ -128,8 +136,8 @@ Divides each element with a integer constant.
 Examples
 --------
 
-Calcuates the min, max and average of a metric over a hour:
+Calculates the min, max and average of a metric over a hour:
 
-.. code-block:: sql
+.. code-block:: SQL
 
    SELECT min(vm, 10m), avg(vm, 10m), max(vm, 10m) AS max FROM cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon AS vm LAST 60m
