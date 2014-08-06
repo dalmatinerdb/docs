@@ -7,7 +7,16 @@ Installation
 Binaries
 --------
 
-Sorry at this point in time no bianries exist.
+Binary packages for SmartOS are are in the project-fifo repository they can be installed via pkgin:
+
+.. code-block:: bash
+
+   VERSION='dev' # use 'rel' for release packages
+   echo "http://release.project-fifo.net/pkg/${VERSION}/" >>/opt/local/etc/pkgin/repositories.conf
+   pkgin -fy up
+   pkgin install dalmatinerdb # To install the backend package
+   pkgin install dalmatinerfe # To install the frontend package
+
 
 From Sorce
 ----------
