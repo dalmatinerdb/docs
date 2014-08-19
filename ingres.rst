@@ -42,7 +42,6 @@ Data Section
 
 The data section contains raw data for the database, each datapoint consists out of 9 bytes. 1 byte for indicating written data and 8 byte for a 64 bit signed integer in network byte order.
 
-
 .. code-block:: erlang
 
    <<1, Value:64/signed-integer>>
