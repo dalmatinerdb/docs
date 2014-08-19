@@ -17,15 +17,25 @@ Metrics are sent as size prefixed data. The layout of a metric package looks lik
      Time:64/integer,                     %% The time (or offset) of the package
      BucketSize:16:integer,               %% The size of the bucket name
      Bucket:BucketSize/binary             %% The bucket to write the metric to
-     MetricSize:16:integer,               %% The size of the metric name
+     MetricSection/binary                 %% The One or more metric entries
+     >>
+
+
+
+All sizes are given in bytes. The values are unsigned integers in **network byte order**. Especially with `DataSize` this is to be noted since it does **NOT** reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of 9. As a result, a maximum of 7281 datapoints can be sent per metric package, not 65536.
+
+Metric Section
+--------------
+
+The metric section can consist out of one or more metric blocks as described below, blocks are simply concatted sunce UDP packages have a fixed size, prefixing with size is not required.
+
+.. code-block:: erlang
+
+   <<MetricSize:16:integer,               %% The size of the metric name
      Metric:MetricSize/binary             %% The metric name
      DataSize:16:integer,                 %% The size of the metric name
      Data:DataSize/binary                 %% The metric name
      >>
-
-All sizes are given in bytes. The values are unsigned integers in **network byte order**. Especially with `DataSize` this is to be noted since it does **NOT** reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of 9. As a result, a maximum of 7281 datapoints can be sent per metric package, not 65536.
-
-Not only can a metric package have multiple consecutive datapoints, it is also possible to combine multiple metric packages into a single UDP datagram. This allows to set multiple different metrics at once. Combining metric packages allows for some optimizations and is recommended as long as the liveliness of the data doesn't prevent it.
 
 Data Section
 ------------
