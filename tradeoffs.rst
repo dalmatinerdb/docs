@@ -4,7 +4,7 @@
 Tradeoffs & Design
 ==================
 
-An essential part of every database is to make a decision aobut which tradeoff to make, every database makes them in one way or another and I feel it important to be upfront about them. Being open about what is won and what is lost makes it not only honesty but makes it easyer for users to make a informed decision when picking a database for their usecase.
+An essential part of every database is to make a decision about which tradeoff to make, every database makes them in one way or another and I feel it important to be upfront about them. Being open about what is won and what is lost makes it not only honesty but makes it easyer for users to make a informed decision when picking a database for their usecase.
 
 .. note::
 
