@@ -109,7 +109,7 @@ empty/2
 Returns the total of empty data-points in a time-range. This can be used to indicate the precision of the data and the loss occurring before they get stored.
 
 percentile/3
-```````
+````````````
 Returns the value of the ``n`` th percentile, where 0 < ``n`` < 1. The percentile is given as the second value of the function, the time-range to aggregate over as the third.
 
 Manipulation Functions
@@ -138,6 +138,6 @@ Examples
 
 Calculates the min, max and average of a metric over a hour:
 
-.. code-block:: SQL
+.. code-block:: sql
 
    SELECT min(vm, 10m), avg(vm, 10m), max(vm, 10m) AS max FROM cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon AS vm LAST 60m
