@@ -41,7 +41,7 @@ Installing the datastore
    ./bin/ddb start
 
 .. note::
-    DalmatinerDB by default expects to run as the user `dalmatinerdb`, this can be changed or disabled by editing the `bin/ddb` file's entry `RUNNER_USER`
+    DalmatinerDB by default expects to run as the user ``dalmatinerdb``, this can be changed or disabled by editing the ``bin/ddb`` file's entry ``RUNNER_USER``
 
 Installing the frontend
 ```````````````````````
@@ -58,7 +58,7 @@ Installing the frontend
    ./bin/dalmatinerfe start
 
 .. note::
-    DalmatinerFrontend by default expects to run as the user `dalmatinerfe`, this can be changed or disabled by editing the `bin/dalmatinerfe` file's entry `RUNNER_USER`
+    DalmatinerFrontend by default expects to run as the user ``dalmatinerfe``, this can be changed or disabled by editing the ``bin/dalmatinerfe`` file's entry ``RUNNER_USER``
 
 .. warning::
     At the moment automatic handling of disconnected upstream servers isn't handled well and might require a restart of the frontend.

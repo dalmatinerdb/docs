@@ -4,14 +4,12 @@
 TCP Protocol
 ============
 
-Keepalife
----------
+All TCP data is prefixed with 4 byte size.
 
-A simple keepalife that can be send, no reply will be send to this message
+Data ingress
+------------
 
-.. code-block:: erlang
-
-   <<0>>.
+The TCP endpoint accepts the same data `packages as the UDP endpoint <ingres.html>`_ for ingres.
 
 List Buckets
 ------------

@@ -4,7 +4,7 @@
 Data Input
 ==========
 
-DalmatinerDB uses UDP for data ingres, which is one of its trade-offs. UDP is a lot faster than TCP. It prevents the providers from blocking and the consumer from overloading by dropping packages it can not handle. It is possible to have multiple UDP ports for increased concurrency.
+DalmatinerDB uses UDP for data ingress, which is one of its trade-offs. UDP is a lot faster than TCP. It prevents the providers from blocking and the consumer from overloading by dropping packages it can not handle. It is possible to have multiple UDP ports for increased concurrency.
 
 Metric Package
 --------------

@@ -8,7 +8,7 @@ An essential part of every database is to make a decision about which tradeoff t
 
 .. note::
 
-   Please keep in mind that all systems have tradeoffs and that just because some are not open about them does not mean they do not make them.
+   Please keep in mind that all systems make tradeoffs and that just because some are not open about them does not mean they do not make them but rahter mean they are trying to sweep them under the rug.
 
 Foundation
 ----------
@@ -17,14 +17,20 @@ The design decisions for DalmatinerDB are based on a number of observation about
 
 Metrics are imutable
 ````````````````````
+
 Once a metric is submitted it isn't going to change any more, the CPU usage last monday at 5:31 will not suddenly spike today. It might however happen that writing the metric is delayed, so writing in the 'past' can happen.
 
-A single value doens't matter
-`````````````````````````````
-It is more important to have the bulk of data than have a single value. Usually all views are aggregated and missing values can be interpolated.
+The good of many outwights the good of one
+``````````````````````````````````````````
+
+DalmatinerDB is build to allow metric input in second or even sub second level precision, at that short intervals it is more important to allow for the majority of the metrics are written and stored correctly then that it is guarantteed that every metric has every second accounted for.
+
+The usual look at this kind of data is aggregated and DalmatinerDB will interpolate the missing values to the best of it's abilities. The cost of handeling the corner case that a single metric spikes for a time interval and return to normal imideately is very high and for this not worth the drawbacks in performance and scalabilty.
+
 
 Everything is a integer
 ```````````````````````
+
 Every metric is either a integer value or can be represented as one (or mutliple). Allowing to scale metrics helps here. As an example ``1.5s`` can be represented as ``1500ms``, a set of percentiles can be represented as multiple metrics (``metric.99``, ``metric.95`` ...)
 
 
@@ -39,7 +45,11 @@ Given the immutability of metrics it can be argued that it is impossible to gene
 
 Filesystem
 ``````````
+
 DalmatinerDB is designed to run on ZFS and other filesystems are strongly discouraged. While DalmatinerDB will start on any filesystem the experience will be greatly degraded without ZFS or a equally capable filesystem as a base.
 
 DalmatinerDB's performance relies heaviley on taking advantage of facilities like ARC, ZIL, checksums and volume compression. Expecting those things to be handled on a filesystem level makes it possible to remove most of the code for caching, compression, validation from the application improving code simplicity, stability, and performance significantly.
 
+.. note::
+
+   There is no technical reason why DalmatinerDB won't run on a different FS, it will just loose the edge it gets by taking advantage of the advanced features. The Linux folks are very proud of btrfs so even so DalmatinerDB is not tested on it, it should give a comparable experience.

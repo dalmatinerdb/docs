@@ -23,9 +23,19 @@ Each zone has 15TB of storage on spinning disks with L2ARC and ZIL on mirrored S
 Configuration
 `````````````
 
-DalmatinerDB is configured to use 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier. A detailed breakdown of this process is given in the DalmatinerDB section) and a R/N/W value of 1.
+1st round
+'''''''''
+
+DalmatinerDB used 30 UDP listeners and caches up to 100s in memory before flushing a metric (however most metrics are flushed earlier. A detailed breakdown of this process is given in the DalmatinerDB section) and a R/N/W value of 1.
 
 KairosDB 0.9.3 and Cassandra version 2.0.5 are used with the default configuration (Keyspace configuration based on the KairosDB defaults) with a N value of 1. Since it is not possible to disable compression lz4 is automatically used.
+
+2nd round
+:::::::::
+
+DalmatinerDB used 1 TCP listeners and caches up to 30m in memory before flushing a metric (unless a read occurs) and a R/N/W value of 1.
+
+Graphite was configured with 1 relay splitting the load betwee  6 caches based on a `configuration provided by Jason Dixon <https://gist.github.com/Licenser/ed34265a55d23ee93093>`_.
 
 Datastores
 ``````````
@@ -38,7 +48,7 @@ Datastores
 Workload
 --------
 
-The systems are subjected to a workload of a stream of roughly 14,000 metrics per seconds (one datapoint per metric per second). The only batching allowed is on the metric axis not the time axis, which cuts network overhead and does not reduce the liveliness of the database's data.
+The systems are subjected to a workload of a stream of roughly 54,000 metrics per seconds (one datapoint per metric per second). The only batching allowed is on the metric axis not the time axis, which cuts network overhead and does not reduce the liveliness of the database's data.
 
 Each metric consists of:
 
@@ -54,38 +64,42 @@ Measurements presented here are taken after a week of continuous load.
 Results
 -------
 
-Results for Graphite are not listed since halfway through the test carbon-cache locked up with and consumed 100% memory in its zone.
+Please not that Graphite was not part of the first set of benchmark results due to the fact that misconfiguration lead to memory problems (out of memory). Since then `Jason Dixon <http://obfuscurity.com>`_ was so kind to assist with creating a much improved configuration for Graphite.
+
+KairosDB was since retired so values are still shown from the first round of tests, since then the number of metrics has increased slightly (~10%) from roughly 14k to a bit over 15k.
 
 Usage during operations
 ```````````````````````
 
-The graphs shouw measurements over 1 hour, with the average over a minute taken of a from the described system w/o significant read quaries happening during that timeframe on DalmatinerDB and without any read quaries on KairosDB.
+The graphs shouw measurements over 1 hour, with the average over a minute taken of a from the described system w/o significant read quaries happening during that timeframe on DalmatinerDB and without any read quaries on KairosDB or graphite.
 
 The first graph shows CPU cores used. In it a cpu usage of 3.125 corresponds to 100% of a core used.
 
-+-------------+--------------+---------------------+
-| Measurement | DalmatinerDB | KairosDB            |
-+-------------+--------------+---------+-----------+
-|             |              |  Kairos | Cassandra |
-+-------------+--------------+---------+-----------+
-| CPU Usage % | 2.8%         | 3.5%    | 1.8%      |
-+-------------+--------------+---------+-----------+
-| CPU Cores   | 0.9          | 1.1     | 0.6       |
-+-------------+--------------+---------+-----------+
++-------------+--------------------+----------------+--------------------+
+| Measurement | DalmatinerDB (15k) | Graphite (15k) | KairosDB (14k)     |
++-------------+--------------------+----------------+--------+-----------+
+|             |                    |                | Kairos | Cassandra |
++-------------+--------------------+----------------+--------+-----------+
+| CPU Usage % | 1.5%               | 4.5%           | 3.5%   | 1.8%      |
++-------------+--------------------+----------------+--------+-----------+
+| CPU Cores   | 0.48               | 1.44           | 1.12   | 0.576     |
++-------------+--------------------+----------------+--------+-----------+
+
+.. image:: _static/img/bench_cpu_graphite.png
 
 .. image:: _static/img/bench_cpu.png
 
 The second graph shows MB of used memory.
 
-+-------------+--------------+---------------------+
-| Measurement | DalmatinerDB | KairosDB            |
-+-------------+--------------+---------+-----------+
-|             |              |  Kairos | Cassandra |
-+-------------+--------------+---------+-----------+
-| Memory SIZE | 260MB        | 1323MB  | 7720MB    |
-+-------------+--------------+---------+-----------+
-| Memory RSS  | 135MB        | 1303MB  | 5546MB    |
-+-------------+--------------+---------+-----------+
++-------------+--------------------+----------------+---------------------+
+| Measurement | DalmatinerDB (15k) | Graphite (15k) | KairosDB (14k)      |
++-------------+--------------------+----------------+---------+-----------+
+|             |                    |                |  Kairos | Cassandra |
++-------------+--------------------+----------------+---------+-----------+
+| Memory SIZE | 527MB              | 343MB          | 1323MB  | 7720MB    |
++-------------+--------------------+----------------+---------+-----------+
+| Memory RSS  | 381MB              | 251MB          | 1303MB  | 5546MB    |
++-------------+--------------------+----------------+---------+-----------+
 
 .. image:: _static/img/bench_mem.png
 
@@ -94,19 +108,20 @@ Data Size
 
 All systems use compression. Shown is the effective data size on disk:
 
-.. note::
+.. warning::
 
-  KairosDB uses compression in Cassandra and there is no option to disable it. This makes it hard to determine the compresison ratio and the effective size per metric.
+  This results have some issues, but for fairness sake they are still shown. The main issue is the fluctuation of growth depending on cache flushes it is very unrelaiable and even repeated tests hardly gave any consistant results. A second issue is that 
+  KairosDB uses compression in Cassandra and there is no option to disable it. This makes it hard to determine the compresison ratio and the effective size per metric. For Graphite I do not know the size of a data point,  it looks to be 32 bit but without clear confirmation.
 
-+---------------+--------------+----------+
-| Measurement   | DalmatinerDB | KairosDB |
-+---------------+--------------+----------+
-| grows 10m     | 9133B        | 80514B   |
-+---------------+--------------+----------+
-| compressratio | 8.32x        | 1.02x *  |
-+---------------+--------------+----------+
-| size/point    | 8.65 bit     | ???      |
-+---------------+--------------+----------+
++---------------+--------------+----------+----------+
+| Measurement   | DalmatinerDB | Graphite | KairosDB |
++---------------+--------------+----------+----------+
+| grows 10m     | 9133B        | 5144B    | 80514B   |
++---------------+--------------+----------+----------+
+| compressratio | 8.32x        | 3.59x    | 1.02x *  |
++---------------+--------------+----------+----------+
+| size/point    | 8.65 bit     | ???      | ???      |
++---------------+--------------+----------+----------+
 
 Query Times
 ```````````
@@ -127,7 +142,7 @@ Query performed: The maximum nwait per second over the last hour for a given VM.
 +-------------+--------------+----------+
 
 
-Query performed: The maximum nwait per hour over the last day for 7 VMs.
+Query performed: The maximum usage per hour over the last day for 7 VMs.
 
 .. code-block::
    sql
@@ -156,38 +171,4 @@ Addendum
 DalmatierDB write sizes
 ```````````````````````
 
-Actual distribution of write cache as affected by read and out of order flushes:
-
-========= ========
-# Metrics # Writes
---------- --------
-38               3
-85              10
-49              32
-16              69
-37             132
-83             149
-84             417
-15             588
-62             672
-93             672
-35             682
-63             682
-69             682
-13             806
-14             849
-36            1030
-12            4030
-11            4398
-9            11694
-1            11719
-8            12780
-10           13124
-3            15206
-7            25545
-6            29203
-101          37089
-4            52765
-5            85455
-2            86841
-========= ========
+In the second round of tests the caching algorithm of DalmatinerDB changed resulting in always high write sizes.
