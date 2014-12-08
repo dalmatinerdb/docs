@@ -11,6 +11,62 @@ Data ingress
 
 The TCP endpoint accepts the same data `packages as the UDP endpoint <ingres.html>`_ for ingres.
 
+
+Stream Mode
+-----------
+
+It is possible to swtich the TCP connection, this stream allows to specify a bucket for the stream
+and by that prevent it to be resend with every metric. Also it makes it possible for the connection
+cache to have a specified maximal duration between the first and the last metric received before the
+data is flushed.
+
+Initializing
+````````````
+
+This will switch the TCP connection to stream mode from now on only payload and flush messages
+are accepted.
+
+.. warning::
+
+   Once initialized there is no more 4 byte prefix! This allows for a more efficient way of streaming
+   data since even partially arived packages can be handled in a way.
+
+
+.. code-block:: erlang
+
+   <<4,             % Identifies entering stream mode.
+     MaxDelay:8,    % We will flush when the delay is greater or equal Delay
+     Bucket/binary  % All metrics on this stream will be stored in this bucket.
+   >>.
+
+
+Payload
+```````
+
+The metric packages automatically flash the connection cache when ``(Time - min(All Times)) > MaxDelay``.
+
+The data can hold one or more metric values and it is possible to include 'unset'.
+
+.. code-block:: erlang
+
+   <<1,                         % Identifies this as a metric package
+     Time:64/integer,           % The time offset
+     _MetricSize:16/integer,    % Length of the metric name in bytes.
+     Metric:_MetricSize/binary, % The metric.
+     _DataSize:16/integer,      % Length of the data in bytes.
+     Data:_DataSize/binary      % One or more metric points
+   >>.
+
+Flush
+`````
+
+It is possible to control the flush time outside of the timing by forcing a flush as part of the stream. To do that the ``flush`` message can be used.
+
+.. code-block:: erlang
+
+   <<2>>. % Indicates that at this point the connection cache should be flushed.
+
+
 List Buckets
 ------------
 
