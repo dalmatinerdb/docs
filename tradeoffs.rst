@@ -8,7 +8,7 @@ An essential part of every database is to make a decision about which tradeoff t
 
 .. note::
 
-   Please keep in mind that all systems make tradeoffs and that just because some are not open about them does not mean they do not make them but rahter mean they are trying to sweep them under the rug.
+   Please keep in mind that all systems make tradeoffs and that just because some are not open about them does not mean they do not make them but rather mean they are trying to sweep them under the rug.
 
 Foundation
 ----------
