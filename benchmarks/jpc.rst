@@ -14,7 +14,6 @@ Once the maximum load is reached the system is keeped running until an hour of a
 
 The first test is run with 1 DDB and 1 haggar VM, then slowly adding more systems.
 
-
 Setup
 -----
 
@@ -69,7 +68,9 @@ We also configure the Dalmatiner Frontend on the same node, this could go to a e
 haggar
 ``````
 
-a precompiled binary can be downloaded form `here <https://cloudup.com/cvikDf2TcpA>`_ it is compiled from `this source <https://github.com/dalmatinerdb/haggar>`_. The shasum is ``501bf8c41dfd9b4fafcc79fc6f0232367535fa0c  haggar.ddb.bz2``.
+The haggar instance was modified to use a persistant TCP connection instead of reopening the socket for every actor every second. It uses the Streaming TCP API with the ``prefix`` as bucket and forces a flush after each complete send (2k metrics).
+
+A precompiled binary can be downloaded form `here <https://cloudup.com/cvikDf2TcpA>`_ it is compiled from `this source <https://github.com/dalmatinerdb/haggar>`_. The shasum is ``501bf8c41dfd9b4fafcc79fc6f0232367535fa0c  haggar.ddb.bz2``.
 
 Per hagger node we start 8 instances (one per vCPU), all instances on one hagger node connect to the same ddb node, the prefix is just a increasing number for the bucket:
 
@@ -133,3 +134,15 @@ we then checm for completion of the join opperation
 .. image:: ../_static/img/jpc_5node.png
 
 the results show between 8,500,000 and 9,000,000 metrics per second.
+
+
+Notes
+-----
+
+The following things should be noted for fairness:
+
+1) The high IO 8 instances used have 'only' 1TB of disk, given the load in the test and with Joyent not offering ZFS compression this means they can only hold about a month worth of data. With ZFS compression it would be around half a year.
+
+2) The ``N`` value in the tests was 1, so no redundancy in storage was configured, an increased N value would approximately reduce the performance by the factor ``1/N``.
+
+3) This test only ran for an hour after stabilizing, this was simply done due to the cost other run on the `Lucera cloud <https://lucera.com>`_ show that the numbers once stabilized stay constant for days.
