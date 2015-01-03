@@ -14,7 +14,7 @@ Welcome to DalmatinerDB's documentation!
    installation
    configuration
    tradeoffs
-   tcp_proto
+   proto
    query_language
    http_api
    benchmarks

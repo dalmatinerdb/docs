@@ -1,11 +1,15 @@
 .. DalmatinerDB data input manual
    Heinz N. Gies on Sat June 5 16:49:03 2014.
 
-TCP Protocol
-============
 
-All TCP data is prefixed with 4 byte size.
+Network Protocol
+****************
 
+General
+=======
+
+Constatns / Macros
+------------------
 The following constants (Macros) are defined as part of the protocol as they name frequently reoccuring values:
 
 .. code-block:: erlang
@@ -52,6 +56,9 @@ The following constants (Macros) are defined as part of the protocol as they nam
    %% The type used to encode sizes.
    -define(SIZE_TYPE, unsigned-integer).
 
+   %% The type used to encode time.
+   -define(TIME_TYPE, unsigned-integer).
+
    %% mmath.hrl
    -define(BITS, 56).
    -define(INT_TYPE, signed-integer).
@@ -62,6 +69,21 @@ The following constants (Macros) are defined as part of the protocol as they nam
 
    -define(DATA_SIZE, ((?BITS + ?TYPE_SIZE) div 8)).
 
+Datapoints
+----------
+
+On both read and write datapoints are encoded as follows:
+
+.. code-block:: erlang
+
+   <<?INT:?TYPE_SIZE, Value:?BITS/?INT_TYPE>>.
+   <<?NONE:?TYPE_SIZE, 0:?BITS/?INT_TYPE>>.
+
+
+TCP
+===
+
+All TCP data is prefixed with 4 byte size.
 
 
 Ingress
@@ -110,12 +132,12 @@ The data can hold one or more metric values and it is possible to include 'unset
 
 .. code-block:: erlang
 
-   <<5,                         % Identifies this as a metric package
-     Time:64/integer,           % The time offset
-     _MetricSize:16/integer,    % Length of the metric name in bytes.
-     Metric:_MetricSize/binary, % The metric.
-     _DataSize:16/integer,      % Length of the data in bytes.
-     Data:_DataSize/binary      % One or more metric points
+   <<5,                                 %% Identifies this as a metric package
+     Time:?TIME_SIZE/?SIZE_TYPE,        %% The time offset
+     _MetricSize:?METRIC_SS/?SIZE_TYPE, %% Length of the metric name in bytes.
+     Metric:_MetricSize/binary,         %% The metric.
+     _DataSize:?DATA_SS/?SIZE_TYPE,     %% Length of the data in bytes.
+     Data:_DataSize/binary              %% One or more metric points
    >>.
 
 Flush
@@ -201,10 +223,6 @@ There will **always** be returned ``Count`` messages will be returned, if there 
 
 where each of the elements looks like one of thise:
 
-.. code-block:: erlang
-
-   <<?INT:?TYPE_SIZE, Value:?BITS/?INT_TYPE>>.
-   <<?NONE:?TYPE_SIZE, 0:?BITS/?INT_TYPE>>.
 
 Bucket Information
 ``````````````````
@@ -272,3 +290,41 @@ Deletes a bucket from the system.
    %% The Size of the bucket binary and the bucket itself
      BucketSize:?BUCKET_SS/?SIZE_TYPE, Bucket:BucketSize/binary
    >>.
+
+UDP
+===
+
+Metric Package
+--------------
+
+Metrics are sent as size prefixed data. The layout of a metric package looks like this:
+
+.. code-block:: erlang
+
+   <<0,                                   %% Prefix to denote type of message
+     BucketSize:?BUCKET_SS/?SIZE_TYPE,    %% The size of the bucket name
+     Bucket:BucketSize/binary             %% The bucket to write the metric to
+     MetricSection/binary                 %% The One or more metric entries
+     >>
+
+
+All sizes are given in bytes. The values are unsigned integers in **network byte order**. 
+
+Metric Section
+--------------
+
+The metric section can consist out of one or more metric blocks as described below, blocks are simply concatted sunce UDP packages have a fixed size, prefixing with size is not required.
+
+.. code-block:: erlang
+
+   <<
+     Time:?TIME_SIZE/?TIME_TYPE,          %% The time (or offset) of the package
+     MetricSize:?METRIC_SS/?SIZE_TYPE,    %% The size of the metric name
+     Metric:MetricSize/binary             %% The metric name
+     DataSize:?DATA_SS/?SIZE_TYPE,        %% The size of the metric name
+     Data:DataSize/binary                 %% The metric name
+     >>
+
+With ``DataSize`` this is to be noted since it does **NOT** reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of ``?DATA_SIZE``. As a result, a maximum of 7281 datapoints can be sent per metric package, not 65536.
+
+The Data section contains datapoints as documented above.
