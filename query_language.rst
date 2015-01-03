@@ -15,39 +15,40 @@ The basic syntax looks like this::
 
 Please keep in mind that each query can only return a single row of data at the moment.
 
+
 Fields (`SELECT` section)
 `````````````````````````
 
 A field can either be a metric, an alias for a metric or a function:
 
-* `cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon` - a fully qualified metric.
-* `vm` - an alias that is defined in the `FROM` section of the query.
-* `avg(vm, 1m)` - a aggregation function.
+* ``cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon`` - a fully qualified metric.
+* ``vm`` - an alias that is defined in the ``FROM`` section of the query.
+* ``avg(vm, 1m)`` - a aggregation function.
 
-Fields can be aliased for output adding a `AS <alias>` directive after the field.
+Fields can be aliased for output adding a ``AS <alias>`` directive after the field. The alias **can be** quoted, unless a keyword is used as alias (such as ``min``) in which case it **must** be quoted.
 
-Multiple fields can be given separating two fields with a `,`. The resolution of fields does not have to be the same, and there is no validation to enforce this!
+Multiple fields can be given separating two fields with a ``,``. The resolution of fields does not have to be the same, and there is no validation to enforce this!
 
 Aliases (`FROM` section)
 ````````````````````````
 
-When a metric is used multiple times it is more readable to alias this metric in the `FROM` section. Multiple elements can be given separated with a `,`. Each element takes the form: `<metric> BUCKET <bucket> AS <alias>`.
+When a metric is used multiple times it is more readable to alias this metric in the ``FROM`` section. Multiple elements can be given separated with a ``,``. Each element takes the form: ``<metric> BUCKET <bucket> AS <alias>``.
 
-It is possible to match multiple metrics by using a mulitget aggregator and a glob to match a metric. Valid multiget aggregators are `sum` and `avg`. For example: `sum(some.metric.* BUCKET b)`.
+It is possible to match multiple metrics by using a mulitget aggregator and a glob to match a metric. Valid multiget aggregators are ``sum`` and ``avg``. For example: ``sum(some.metric.* BUCKET b)``.
 
 Time Range
 ``````````
 
 There are two ways to declare ranges. Although numbers here represent seconds, DalmatinerDB does not care about the time unit at all::
 
-  BETWEEN <start:reltime> AND <end:reltime>
+  BETWEEN <time:time> AND <time:time>
 
 
-The above statement selects all points between the `start` and the `end`.
+The above statement selects all points between the ``start`` and the ``end``.
 
 The most used query is 'what happened in the past X seconds?', so there is a simplified form for this::
 
-  LAST <amount:int>|[time:time>]
+  LAST <amount:int>|<time:timerange>
 
 Resolution (`IN` section)
 `````````````````````````
@@ -61,27 +62,35 @@ Integer (int)
 
 A simple number literal i.e. `42`.
 
-Time (time)
-```````````
+Time (timerange)
+````````````````
 
 There are two ways to declare times:
 
-* Relatively, in which case the time is a simple integer and corresponds to a number of metric points used. (i.e. `60`)
-* Absolute, in which case the time is an integer followed by a time unit such as `ms`, `s`, `m`, `h`, `d` and `w`. In this case the resolution of the metric is taken into account.
+* Relatively, in which case the time is a simple integer and corresponds to a number of metric points used. (i.e. ``60``)
+* Absolute, in which case the time is an integer followed by a time unit such as ``ms``, ``s``, ``m``, ``h``, ``d`` and ``w``. In this case the resolution of the metric is taken into account.
 
-Relative Time (reltime)
-```````````````````````
+Time (time)
+```````````
 
-Relative times can either be the keyword `NOW`, an absolute timestamp (a simple integer) or a relative time in the past such as `<time> AGO`.
+Relative times can either be the keyword ``NOW``, an absolute timestamp (a simple integer) or a relative time in the past such as ``<time> AGO``.
+
+Aslo it is possible to give absolute dates. Dates are provided in a ``"`` quoted strong, they have the form ``YYYY-MM-DD HH:MM:SS`` however some simplifications are possiuble (minutes and seconds can be skipped), and adding a timezone is also an option.
 
 Metric
 ``````
 
-Metrics are simple strings that are optionally separated by dots and a second string for the bucket. The two strings are separated by the keyword `BUCKET`.
+For convinience a metric is often represented as a simple strings that are separated by dots and a second string for the bucket. The two strings are separated by the keyword ``BUCKET``.
 
 Example::
 
   cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon
+
+Jowever internally DalmatinerDB uses a stricter format that allows storing any string inside a metric. To access those metrics you need to wrap each part of it in quotes (``'``). For example a metric for a ip could be written as follows::
+
+  '10.0.0.1'.in.'pkgs/s'
+
+Which would be a metric consisting of three parts, ``10.0.0.1``, ``in`` and ``pkgs/s``. Note that the ``in`` does not need to be quoted but could be.
 
 Aggregation Functions
 ---------------------
@@ -140,4 +149,4 @@ Calculates the min, max and average of a metric over a hour:
 
 .. code-block:: sql
 
-   SELECT min(vm, 10m), avg(vm, 10m), max(vm, 10m) AS max FROM cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon AS vm LAST 60m
+   SELECT min(vm, 10m), avg(vm, 10m), max(vm, 10m) AS 'max' FROM cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon AS vm LAST 60m
