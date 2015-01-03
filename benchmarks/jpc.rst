@@ -141,6 +141,8 @@ Notes
 
 The following things should be noted for fairness:
 
+1) The nodes need a warmup time, the first time a metric is encountered it is more expensive to handle then during opperators
+
 1) The high IO 8 instances used have 'only' 1TB of disk, given the load in the test and with Joyent not offering ZFS compression this means they can only hold about a month worth of data. With ZFS compression it would be around half a year.
 
 2) The ``N`` value in the tests was 1, so no redundancy in storage was configured, an increased N value would approximately reduce the performance by the factor ``1/N``.
