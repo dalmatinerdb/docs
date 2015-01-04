@@ -81,7 +81,7 @@ On both read and write datapoints are encoded as follows:
 
 .. note::
 
-   Not every language handles 56 bit integers as well as erlang does, however 32 bit integers can be used when padded from the left with three bytes (24 bit) of zeros (``0``) for positive values, or minus one (``-1`` / ``255``) bytes for negative integers
+   Not every language handles 56 bit integers as well as erlang does, however 32 bit integers can be used when padded from the left with three bytes (24 bit) of zeros (``0``) for positive values, or minus one (``-1`` / ``255``) bytes for negative integers. An alternative is using 64 bit integers and discarding the left most byte.
 
    .. code-block:: erlang
 
