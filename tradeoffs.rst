@@ -52,4 +52,4 @@ DalmatinerDB's performance relies heaviley on taking advantage of facilities lik
 
 .. note::
 
-   There is no technical reason why DalmatinerDB won't run on a different FS, it will just loose the edge it gets by taking advantage of the advanced features. The Linux folks are very proud of btrfs so even so DalmatinerDB is not tested on it, it should give a comparable experience.
+   There is no technical reason why DalmatinerDB won't run on a different FS, it will just loose some of the the edge it gets by taking advantage of the advanced features. The Linux folks are very proud of btrfs so even so DalmatinerDB is not tested on it, it should give a comparable experience.
