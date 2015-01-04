@@ -79,6 +79,18 @@ On both read and write datapoints are encoded as follows:
    <<?INT:?TYPE_SIZE, Value:?BITS/?INT_TYPE>>.
    <<?NONE:?TYPE_SIZE, 0:?BITS/?INT_TYPE>>.
 
+.. note::
+
+   Not every language handles 56 bit integers as well as erlang does, however 32 bit integers can be used when padded from the left with three bytes (24 bit) of zeros (``0``) for positive values, or minus one (``-1`` / ``255``) bytes for negative integers
+
+   .. code-block:: erlang
+
+      <<10:56/signed-integer>> = <<0:24/signed-integer, 10:32/signed-integer>>.
+      <<0,0,0,0,0,0,10>>
+      <<-10:56/signed-integer>> = <<-1:24/signed-integer, -10:32/signed-integer>>.
+      <<"ÿÿÿÿÿÿö">>
+      <<-1,-1,-1,-1,-1,-1,-10>>
+
 
 TCP
 ===
