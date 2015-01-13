@@ -15,12 +15,12 @@ Foundation
 
 The design decisions for DalmatinerDB are based on a number of observation about metrics. If those observations hold true for you then chances are good that DalmatinerDB is a good fit. If they don't another system with different tradeoffs might be a better choice.
 
-Metrics are imutable
-````````````````````
+Metrics are immutable
+`````````````````````
 
 Once a metric is submitted it isn't going to change any more, the CPU usage last monday at 5:31 will not suddenly spike today. It might however happen that writing the metric is delayed, so writing in the 'past' can happen.
 
-The good of many outwights the good of one
+The good of many outweighs the good of one
 ``````````````````````````````````````````
 
 DalmatinerDB is build to allow metric input in second or even sub second level precision, at that short intervals it is more important to allow for the majority of the metrics are written and stored correctly then that it is guarantteed that every metric has every second accounted for.
