@@ -18,7 +18,7 @@ Binary packages for SmartOS are are in the project-fifo repository they can be i
    pkgin install dalmatinerfe # To install the frontend package
 
 
-From Sorce
+From Source
 ----------
 
 Dependencies:
