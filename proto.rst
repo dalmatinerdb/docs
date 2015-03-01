@@ -91,6 +91,17 @@ On both read and write datapoints are encoded as follows:
       <<"ÿÿÿÿÿÿö">>
       <<-1,-1,-1,-1,-1,-1,-10>>
 
+Metric Names
+------------
+
+Metric names are not simple strings but a lenght prefixed list of elements. The upside of this is that there are no reserved characters (such as ``.``) and it allows a lot faster parsing and matching against them.
+
+An example would be:
+
+.. code-block:: erlang
+
+   <<2, "my", 3, "key">>.
+   <<3, "yet", 7, "another", 3, "one">>.
 
 TCP
 ===
