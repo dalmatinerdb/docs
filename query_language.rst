@@ -50,6 +50,16 @@ The most used query is 'what happened in the past X seconds?', so there is a sim
 
   LAST <amount:int>|<time:timerange>
 
+Alternatively start / end and a duraction can be provided::
+
+  BEFORE <time:time> FOR <amount:int>|<time:timerange>
+
+To select a range prior to a specific point in time or::
+
+  AFTER <time:time> FOR <amount:int>|<time:timerange>
+
+to select a range after a specific point in time.
+
 Resolution (`IN` section)
 `````````````````````````
 By default queries treat incoming data as a one second resolution, however this can be adjusted by passing a resolution section to the query. The syntax is: `IN <resolution:time>`.
