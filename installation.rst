@@ -19,7 +19,7 @@ Binary packages for SmartOS are are in the project-fifo repository they can be i
 
 
 From Source
-----------
+-----------
 
 Dependencies:
 

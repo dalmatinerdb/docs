@@ -103,20 +103,12 @@ An example would be:
    <<2, "my", 3, "key">>.
    <<3, "yet", 7, "another", 3, "one">>.
 
-TCP
-===
 
-All TCP data is prefixed with 4 byte size.
-
-
-Ingress
--------
+Ingress (Stream Mode)
+=====================
 
 The TCP endpoint can only accept incoming data when switched to stream mode. This way a connetion is dedicated to send data to a single bucket. Flushing can be handled either manually or automatically. Automatic flushing sets a maximum delta between the first data cached for the connection the newest arrived bit of information.
 
-
-Stream Mode
-```````````
 
 It is possible to swtich the TCP connection, this stream allows to specify a bucket for the stream
 and by that prevent it to be resend with every metric. Also it makes it possible for the connection
@@ -124,7 +116,7 @@ cache to have a specified maximal duration between the first and the last metric
 data is flushed.
 
 Initializing
-''''''''''''
+------------
 
 This will switch the TCP connection to stream mode from now on only payload and flush messages
 are accepted.
@@ -145,9 +137,8 @@ are accepted.
      BucketSize:?BUCKET_SS/?SIZE_TYPE, Bucket/binary
    >>.
 
-
 Payload
-'''''''
+-------
 
 The metric packages automatically flash the connection cache when ``(Time - min(All Times)) > MaxDelay``.
 
@@ -164,7 +155,7 @@ The data can hold one or more metric values and it is possible to include 'unset
    >>.
 
 Flush
-'''''
+-----
 
 It is possible to control the flush time outside of the timing by forcing a flush as part of the stream. To do that the ``flush`` message can be used.
 
@@ -172,11 +163,39 @@ It is possible to control the flush time outside of the timing by forcing a flus
 
    <<6>>. % Indicates that at this point the connection cache should be flushed.
 
-Querying
+Batching
 --------
+It is possible to batch multiple inserts that are targeted at the same time, this allows to save some extra bandwith when transmitting data. The batching is only avialble in the stream mode.
+
+The batch is initialized with the following message:
+
+.. code-block:: erlang
+
+   <<10,                                %% Command code for batch start
+     Time:?TIME_SIZE/?SIZE_TYPE,        %% The time offset
+   >>.
+
+This can be followed by as many batch packages are desired, each package include one metric name and a single datapoint:
+
+.. code-block:: erlang
+
+   <<_MetricSize:?METRIC_SS/?SIZE_TYPE, %% Length of the metric name in bytes.
+     Metric:_MetricSize/binary,         %% The metric.
+     Point:8/binary                     %% One or more metric points
+   >>.
+
+When no more datapoints are desired for this batch the batch can be terminated by sending a 2 0 byte (which would not be a valid payload package since the MetricSize must be at least 1).
+
+.. code-block:: erlang
+
+   <<0:?METRIC_SS/?SIZE_TYPE>>.         %% This would not be a valid payload package.
+
+
+Querying
+========
 
 List Buckets
-````````````
+------------
 
 This command list all buckets, each bucket known to the system. The command is received and a reply send directly.
 
@@ -195,7 +214,7 @@ The Reply is prefixed with the total size of the whole reply in bytes (not inclu
 
 
 List Metrics
-````````````
+------------
 
 Lists all metrics in a bucket. The bucket to look for is prefixed by 1 byte size for the bucket name.
 
@@ -218,7 +237,7 @@ The Reply is prefixed with the total size of the whole reply in bytes (not inclu
 
 
 Reading Data
-````````````
+------------
 
 Retrieves data for a metric, bucket and metric are size prefixed as strings, Time and count are unsigned integers.
 
@@ -248,7 +267,7 @@ where each of the elements looks like one of thise:
 
 
 Bucket Information
-``````````````````
+------------------
 
 Gets informations of the bucket, namely the resolution and the points per file.
 
@@ -274,10 +293,10 @@ The reply will return the resolution and the points per file of the bucket.
    >>.
 
 Management
-----------
+==========
 
 Adding a bucket
-```````````````
+---------------
 
 Adding a bucket can be achived by the following call.
 
@@ -299,7 +318,7 @@ Adding a bucket can be achived by the following call.
    >>.
 
 Deleting a bucket
-`````````````````
+-----------------
 
 Deletes a bucket from the system.
 
@@ -313,41 +332,3 @@ Deletes a bucket from the system.
    %% The Size of the bucket binary and the bucket itself
      BucketSize:?BUCKET_SS/?SIZE_TYPE, Bucket:BucketSize/binary
    >>.
-
-UDP
-===
-
-Metric Package
---------------
-
-Metrics are sent as size prefixed data. The layout of a metric package looks like this:
-
-.. code-block:: erlang
-
-   <<0,                                   %% Prefix to denote type of message
-     BucketSize:?BUCKET_SS/?SIZE_TYPE,    %% The size of the bucket name
-     Bucket:BucketSize/binary             %% The bucket to write the metric to
-     MetricSection/binary                 %% The One or more metric entries
-     >>
-
-
-All sizes are given in bytes. The values are unsigned integers in **network byte order**. 
-
-Metric Section
---------------
-
-The metric section can consist out of one or more metric blocks as described below, blocks are simply concatted sunce UDP packages have a fixed size, prefixing with size is not required.
-
-.. code-block:: erlang
-
-   <<
-     Time:?TIME_SIZE/?TIME_TYPE,          %% The time (or offset) of the package
-     MetricSize:?METRIC_SS/?SIZE_TYPE,    %% The size of the metric name
-     Metric:MetricSize/binary             %% The metric name
-     DataSize:?DATA_SS/?SIZE_TYPE,        %% The size of the metric name
-     Data:DataSize/binary                 %% The metric name
-     >>
-
-With ``DataSize`` this is to be noted since it does **NOT** reflect the number of datapoints but rather the number of bytes used, thus it has to be a multiple of ``?DATA_SIZE``. As a result, a maximum of 7281 datapoints can be sent per metric package, not 65536.
-
-The Data section contains datapoints as documented above.
