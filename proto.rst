@@ -8,7 +8,7 @@ Network Protocol
 General
 =======
 
-Constatns / Macros
+Constants / Macros
 ------------------
 The following constants (Macros) are defined as part of the protocol as they name frequently reoccuring values:
 
@@ -94,7 +94,7 @@ On both read and write datapoints are encoded as follows:
 Metric Names
 ------------
 
-Metric names are not simple strings but a lenght prefixed list of elements. The upside of this is that there are no reserved characters (such as ``.``) and it allows a lot faster parsing and matching against them.
+Metric names are not simple strings but a length prefixed list of elements. The upside of this is that there are no reserved characters (such as ``.``) and it allows faster parsing and matching against them.
 
 An example would be:
 
@@ -107,18 +107,18 @@ An example would be:
 Ingress (Stream Mode)
 =====================
 
-The TCP endpoint can only accept incoming data when switched to stream mode. This way a connetion is dedicated to send data to a single bucket. Flushing can be handled either manually or automatically. Automatic flushing sets a maximum delta between the first data cached for the connection the newest arrived bit of information.
+The TCP endpoint can only accept incoming data when switched to stream mode. This way a connection is dedicated to send data to a single bucket. Flushing can be handled either manually or automatically. Automatic flushing sets a maximum delta between the first data cached for the connection and the newest arrived bit of information.
 
 
-It is possible to swtich the TCP connection, this stream allows to specify a bucket for the stream
-and by that prevent it to be resend with every metric. Also it makes it possible for the connection
+It is possible to switch the TCP connection, this stream allows to specify a bucket for the stream
+and by that prevent it to be resent with every metric. Also, it makes it possible for the connection
 cache to have a specified maximal duration between the first and the last metric received before the
 data is flushed.
 
 Initializing
 ------------
 
-This will switch the TCP connection to stream mode from now on only payload and flush messages
+This will switch the TCP connection to stream mode. From then on, only payload and flush messages
 are accepted.
 
 .. warning::
@@ -140,7 +140,7 @@ are accepted.
 Payload
 -------
 
-The metric packages automatically flash the connection cache when ``(Time - min(All Times)) > MaxDelay``.
+The metric packages automatically flush the connection cache when ``(Time - min(All Times)) > MaxDelay``.
 
 The data can hold one or more metric values and it is possible to include 'unset'.
 
@@ -165,7 +165,7 @@ It is possible to control the flush time outside of the timing by forcing a flus
 
 Batching
 --------
-It is possible to batch multiple inserts that are targeted at the same time, this allows to save some extra bandwith when transmitting data. The batching is only avialble in the stream mode.
+It is possible to batch multiple inserts that are targeted at the same time, this allows to save some extra bandwith when transmitting data. The batching is only available in stream mode.
 
 The batch is initialized with the following message:
 
@@ -184,7 +184,7 @@ This can be followed by as many batch packages are desired, each package include
      Point:8/binary                     %% One or more metric points
    >>.
 
-When no more datapoints are desired for this batch the batch can be terminated by sending a 2 0 byte (which would not be a valid payload package since the MetricSize must be at least 1).
+When no more datapoints are desired for this batch, the batch can be terminated by sending a 2 0 byte (which would not be a valid payload package since the MetricSize must be at least 1).
 
 .. code-block:: erlang
 
@@ -197,13 +197,13 @@ Querying
 List Buckets
 ------------
 
-This command list all buckets, each bucket known to the system. The command is received and a reply send directly.
+This command list all buckets known to the system. The command is received and a reply send directly.
 
 .. code-block:: erlang
 
    <<3>>.
 
-The Reply is prefixed with the total size of the whole reply in bytes (not including the size prefix itself). Then each bucket is prefixed by a size of the bucket name.
+The reply is prefixed with the total size of the whole reply in bytes (not including the size prefix itself). Then each bucket is prefixed by a size of the bucket name.
 
 .. code-block:: erlang
 
@@ -226,7 +226,7 @@ Lists all metrics in a bucket. The bucket to look for is prefixed by 1 byte size
      Bucket:BucketSize/binary
    >>.
 
-The Reply is prefixed with the total size of the whole reply in bytes (not including the size prefix itself). Then each metric is prefixed by a size of the metric name.
+The reply is prefixed with the total size of the whole reply in bytes (not including the size prefix itself). Then each metric is prefixed by a size of the metric name.
 
 .. code-block:: erlang
 
@@ -256,20 +256,20 @@ Retrieves data for a metric, bucket and metric are size prefixed as strings, Tim
      Count:?COUNT_SIZE/?SIZE_TYPE
    >>.
 
-There will **always** be returned ``Count`` messages will be returned, if there is no or insufficient data or the bucket/metric doesn't exist the missing data will be filled with blanks.
+There will **always** be returned ``Count`` messages will be returned, if there is no data or insufficient data or the bucket/metric doesn't exist the missing data will be filled with blanks.
 
 .. code-block:: erlang
 
    <<Reply:(?DATA_SIZE*Count)/binary>>.
 
 
-where each of the elements looks like one of thise:
+where each of the elements looks like one of these:
 
 
 Bucket Information
 ------------------
 
-Gets informations of the bucket, namely the resolution and the points per file.
+Gets information of the bucket, namely the resolution and the points per file.
 
 .. warning::
 
