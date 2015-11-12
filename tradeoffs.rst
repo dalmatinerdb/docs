@@ -4,7 +4,7 @@
 Tradeoffs & Design
 ==================
 
-An essential part of every database is to make a decision about which tradeoff to make, every database makes them in one way or another and I feel it important to be upfront about them. Being open about what is won and what is lost makes it not only honesty but makes it easier for users to make a informed decision when picking a database for their usecase.
+An essential part of every database is to make a decision about which tradeoff to make, every database makes them in one way or another and I feel it is important to be upfront about them. Being open about what is won and what is lost makes it not only honesty but makes it easier for users to make an informed decision when picking a database for their usecase.
 
 .. note::
 
@@ -13,7 +13,7 @@ An essential part of every database is to make a decision about which tradeoff t
 Foundation
 ----------
 
-The design decisions for DalmatinerDB are based on a number of observation about metrics. If those observations hold true for you then chances are good that DalmatinerDB is a good fit. If they don't another system with different tradeoffs might be a better choice.
+The design decisions for DalmatinerDB are based on a number of observations about metrics. If those observations hold true for you then chances are good that DalmatinerDB is a good fit. If they don't another system with different tradeoffs might be a better choice.
 
 Metrics are immutable
 `````````````````````
@@ -23,15 +23,15 @@ Once a metric is submitted it isn't going to change any more, the CPU usage last
 The good of many outweighs the good of one
 ``````````````````````````````````````````
 
-DalmatinerDB is build to allow metric input in second or even sub second level precision, at that short intervals it is more important to allow for the majority of the metrics are written and stored correctly then that it is guarantteed that every metric has every second accounted for.
+DalmatinerDB is built to allow metric input in second or even sub second level precision. At those short intervals it is more important to allow for the majority of the metrics to be written and stored correctly then to guarantee that every metric has every second accounted for.
 
-The usual look at this kind of data is aggregated and DalmatinerDB will interpolate the missing values to the best of it's abilities. The cost of handeling the corner case that a single metric spikes for a time interval and return to normal imideately is very high and for this not worth the drawbacks in performance and scalabilty.
+The usual look at this kind of data is aggregated and DalmatinerDB will interpolate the missing values to the best of it's abilities. The cost of handling the corner case that a single metric spikes for a time interval and return to normal immediately is very high and for this not worth the drawbacks in performance and scalabilty.
 
 
 Everything is a integer
 ```````````````````````
 
-Every metric is either a integer value or can be represented as one (or mutliple). Allowing to scale metrics helps here. As an example ``1.5s`` can be represented as ``1500ms``, a set of percentiles can be represented as multiple metrics (``metric.99``, ``metric.95`` ...)
+Every metric is either an integer value or can be represented as one (or multiple). Allowing to scale metrics helps here. As an example ``1.5s`` can be represented as ``1500ms``, a set of percentiles can be represented as multiple metrics (``metric.99``, ``metric.95`` ...)
 
 
 Design
@@ -39,7 +39,7 @@ Design
 
 CAP
 ```
-The perhaps first decision to make is either to pick Consistency or Availability. With metrics and the notion of immutability there is little harm in picking Availability here, so DalmatinerDB will stay available for read and write options even in the event of a network partition at the cost of giving stale reads on both sides of the partition until it is healed (given side A can't know what was written at side B).
+Perhaps the first decision to make is either to pick Consistency or Availability. With metrics and the notion of immutability there is little harm in picking Availability here, so DalmatinerDB will stay available for read and write options even in the event of a network partition at the cost of giving stale reads on both sides of the partition until it is healed (given side A can't know what was written at side B).
 
 Given the immutability of metrics it can be argued that it is impossible to generate conflicting values on both sides of a split, thus merging is simple and lossless.
 
@@ -48,8 +48,8 @@ Filesystem
 
 DalmatinerDB is designed to run on ZFS and other filesystems are strongly discouraged. While DalmatinerDB will start on any filesystem the experience will be greatly degraded without ZFS or a equally capable filesystem as a base.
 
-DalmatinerDB's performance relies heaviley on taking advantage of facilities like ARC, ZIL, checksums and volume compression. Expecting those things to be handled on a filesystem level makes it possible to remove most of the code for caching, compression, validation from the application improving code simplicity, stability, and performance significantly.
+DalmatinerDB's performance relies heavily on taking advantage of facilities like ARC, ZIL, checksums and volume compression. Expecting those things to be handled on a filesystem level makes it possible to remove most of the code for caching, compression, validation from the application improving code simplicity, stability, and performance significantly.
 
 .. note::
 
-   There is no technical reason why DalmatinerDB won't run on a different FS, it will just loose some of the the edge it gets by taking advantage of the advanced features. The Linux folks are very proud of btrfs so even so DalmatinerDB is not tested on it, it should give a comparable experience.
+   There is no technical reason why DalmatinerDB won't run on a different FS, it will just lose some of the the edge it gets by taking advantage of the advanced features. The Linux folks are very proud of btrfs so even so DalmatinerDB is not tested on it, it should give a comparable experience.
