@@ -50,7 +50,7 @@ The most used query is 'what happened in the past X seconds?', so there is a sim
 
   LAST <amount:int>|<time:timerange>
 
-Alternatively start / end and a duraction can be provided::
+Alternatively start / end and a duration can be provided::
 
   BEFORE <time:time> FOR <amount:int>|<time:timerange>
 
@@ -85,18 +85,18 @@ Time (time)
 
 Relative times can either be the keyword ``NOW``, an absolute timestamp (a simple integer) or a relative time in the past such as ``<time> AGO``.
 
-Aslo it is possible to give absolute dates. Dates are provided in a ``"`` quoted strong, they have the form ``YYYY-MM-DD HH:MM:SS`` however some simplifications are possiuble (minutes and seconds can be skipped), and adding a timezone is also an option.
+Also it is possible to give absolute dates. Dates are provided in a ``"`` quoted string, they have the form ``YYYY-MM-DD HH:MM:SS`` however some simplifications are possible (minutes and seconds can be skipped), and adding a timezone is also an option.
 
 Metric
 ``````
 
-For convinience a metric is often represented as a simple strings that are separated by dots and a second string for the bucket. The two strings are separated by the keyword ``BUCKET``.
+For convenience a metric is often represented as a concatenation of simple strings that are separated by dots and a second string for the bucket. The two strings are separated by the keyword ``BUCKET``.
 
 Example::
 
   cloud.zones.cpu.usage.eca485cf-bdbb-4ae5-aba9-dce767 BUCKET tachyon
 
-Jowever internally DalmatinerDB uses a stricter format that allows storing any string inside a metric. To access those metrics you need to wrap each part of it in quotes (``'``). For example a metric for a ip could be written as follows::
+However internally DalmatinerDB uses a stricter format that allows storing any string inside a metric. To access those metrics you need to wrap each part of it in quotes (``'``). For example a metric for an IP could be written as follows::
 
   '10.0.0.1'.in.'pkgs/s'
 
@@ -141,7 +141,7 @@ derivate/1
 Calculates the derivate of a metric, meaning N'(X)=N(X) - N(X-1)
 
 .. note::
-   Even if the resolution isn't changed this function removes exactly 1 element from the result
+   Even if the resolution isn't changed this function removes exactly 1 element from the result.
 
 multiply/2
 ``````````
