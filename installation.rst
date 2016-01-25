@@ -7,6 +7,15 @@ Installation
 Binaries
 --------
 
+Starting with 14.4.0 Datasets, Joyent introduced signed packages. To properly install DalmatinerDB packages, the Project-FiFo public key is required and can be installed with the following command.
+
+.. code-block:: bash
+   curl -O https://project-fifo.net/fifo.gpg
+   gpg --primary-keyring /opt/local/etc/gnupg/pkgsrc.gpg --import < fifo.gpg
+   gpg --keyring /opt/local/etc/gnupg/pkgsrc.gpg --fingerprint
+
+The key id is BB975564 and the fingerprint CE62 C662 67D5 9129 B291 62A0 ADDF 278A BB97 5564 should be returned respectively.
+
 Binary packages for SmartOS are are in the project-fifo repository they can be installed via pkgin:
 
 .. code-block:: bash
