@@ -10,6 +10,7 @@ Binaries
 Starting with 14.4.0 Datasets, Joyent introduced signed packages. To properly install DalmatinerDB packages, the Project-FiFo public key is required and can be installed with the following command.
 
 .. code-block:: bash
+
    curl -O https://project-fifo.net/fifo.gpg
    gpg --primary-keyring /opt/local/etc/gnupg/pkgsrc.gpg --import < fifo.gpg
    gpg --keyring /opt/local/etc/gnupg/pkgsrc.gpg --fingerprint
