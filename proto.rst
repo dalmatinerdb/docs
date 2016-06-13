@@ -10,7 +10,7 @@ General
 
 Constants / Macros
 ------------------
-The following constants (Macros) are defined as part of the protocol as they name frequently reoccuring values:
+The following constants (Macros) are defined as part of the protocol as they name frequently reccuring values:
 
 .. code-block:: erlang
 
@@ -24,15 +24,14 @@ The following constants (Macros) are defined as part of the protocol as they nam
    %% => each part can be 255 byte at max!
    -define(METRIC_ELEMENT_SS, 8).
 
-
-   %% The number of bits used to encode the size of a whole metric (All of it's
+   %% The number of bits used to encode the size of a whole metric (All of its
    %% parts)
    %% => the maximum number of bytes in a whole metric can be 65,536, so a single
    %% metric can hold at least 255 elments, more if their size is < 256 byte.
    -define(METRIC_SS, 16).
 
    %% The number of bits used to encode a list of metrics.
-   %% => this means a list opperation can return at least 281,474,976,710,656
+   %% => this means a list operation can return at least 281,474,976,710,656
    %% metrics.
    %%
    %% That is a lot! Good problem to have if we ever face it!
@@ -47,6 +46,7 @@ The following constants (Macros) are defined as part of the protocol as they nam
 
    %% Tye number of bits used for encoding the time.
    -define(TIME_SIZE, 64).
+
    %% The number of bits used for encoding the count.
    -define(COUNT_SIZE, 32).
 
@@ -136,6 +136,25 @@ are accepted.
    % All metrics on this stream will be stored in this bucket.
      BucketSize:?BUCKET_SS/?SIZE_TYPE, Bucket/binary
    >>.
+
+In addition, it is possible to specify a resolution for a bucket when switching
+a connection to stream mode:
+
+.. code-block:: erlang
+
+   % Identifies entering stream mode.
+   <<4,
+   % We will flush when the delay is greater or equal Delay
+     Delay:?DELAY_SIZE/?SIZE_TYPE,
+   % DataPoints are measured every N number of seconds
+     Resolution:?TIME_SIZE/?TIME_TYPE,
+   % All metrics on this stream will be stored in this bucket.
+     BucketSize:?BUCKET_SS/?SIZE_TYPE, Bucket/binary
+   >>.
+
+If a resolution is not supplied, the default value of 1s (1000) will be used.
+Since the resolution for a bucket may not be changed once set, the supplied
+value cannot differ to that already set for existing buckets.
 
 Payload
 -------
