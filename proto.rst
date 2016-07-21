@@ -153,8 +153,11 @@ a connection to stream mode:
    >>.
 
 If a resolution is not supplied, the default value of 1s (1000) will be used.
-Since the resolution for a bucket may not be changed once set, the supplied
-value cannot differ to that already set for existing buckets.
+
+.. warning::
+
+   Bucket resolutions cannot change once a bucket has been created.  Attempting
+   to set a different resolution will result in an error.
 
 Payload
 -------
@@ -275,24 +278,23 @@ Retrieves data for a metric, bucket and metric are size prefixed as strings, Tim
      Count:?COUNT_SIZE/?SIZE_TYPE
    >>.
 
-There will **always** be returned ``Count`` messages will be returned, if there is no data or insufficient data or the bucket/metric doesn't exist the missing data will be filled with blanks.
+The number of messages that will be returned will **always** be equal to ``Count``.  If there is no data or insufficient data or the bucket/metric doesn't exist the missing data will be filled with blanks.
 
 .. code-block:: erlang
 
    <<Reply:(?DATA_SIZE*Count)/binary>>.
 
-
 where each of the elements looks like one of these:
 
+.. code-block:: erlang
+
+   <<?INT:?TYPE_SIZE, Value:?BITS/?INT_TYPE>>.
+   <<?NONE:?TYPE_SIZE, 0:?BITS/?INT_TYPE>>.
 
 Bucket Information
 ------------------
 
-Gets information of the bucket, namely the resolution and the points per file.
-
-.. warning::
-
-   Not yet implemented.
+Gets information applicable to the given bucket, namely the resolution, expiry time and the points per file.
 
 .. code-block:: erlang
 
@@ -308,7 +310,7 @@ The reply will return the resolution and the points per file of the bucket.
    <<
      Resolution:?TIME_SIZE/?TIME_TYPE, %% The resolution of the bucket
      PPF:?TIME_SIZE/?TIME_TYPE         %% The points per file of the bucket
-     TTL:?TIME_SIZE/?TIME_TYPE         %% The time a bucket will retain data, 0 indicates indefinite
+     TTL:?TIME_SIZE/?TIME_TYPE         %% The time a bucket will retain data, 0 indicates data is retained indefinitely
    >>.
 
 Management
@@ -317,7 +319,7 @@ Management
 Adding a bucket
 ---------------
 
-Adding a bucket can be achived by the following call.
+Adding a bucket can be achieved by the following call.
 
 .. warning::
 
