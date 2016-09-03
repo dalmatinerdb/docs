@@ -36,6 +36,7 @@ Dependencies:
 * Erlang > R16B3
 * Make
 * GCC
+* G++
 
 Installing the datastore
 ````````````````````````
