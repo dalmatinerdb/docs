@@ -33,7 +33,7 @@ From Source
 
 Dependencies:
 
-* Erlang > R16B3
+* Erlang > R16B3 < R19
 * Make
 * GCC
 * G++
