@@ -4,6 +4,11 @@
 Installation
 ============
 
+Linux
+-----
+
+You can follow this steps: https://gist.github.com/sacreman/9015bf466b4fa2a654486cd79b777e64
+
 Binaries
 --------
 
