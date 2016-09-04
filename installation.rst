@@ -33,9 +33,10 @@ From Source
 
 Dependencies:
 
-* Erlang > R16B3
+* Erlang > R16B3 < R19
 * Make
 * GCC
+* G++
 
 Installing the datastore
 ````````````````````````
@@ -43,7 +44,7 @@ Installing the datastore
 
    git clone https://github.com/dalmatinerdb/dalmatinerdb.git
    cd dalmatinerdb
-   make deps all rel
+   make all rel
    cp -r rel/dalmatinerdb $TARGET_DIRECTORY
    cd $TARGET_DIRECTORY
    cp etc/dalmatinerdb.conf.example etc/dalmatinerdb.conf
